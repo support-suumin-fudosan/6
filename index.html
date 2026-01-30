@@ -211,7 +211,6 @@
       font-size: 15px;
       font-weight: 700;
     }
-    /* セクション見出しをやや大きめに（指定：基本情報 / LINE対応状況 / 成約状況） */
     .section-title.big{
       font-size: 16.5px;
       letter-spacing: 0.01em;
@@ -285,27 +284,24 @@
       .grid-3{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
 
-    /* 日付の枠のレイアウトを綺麗に少し小さくする */
+    /* 日付：白枠は氏名と同じ大きさ（入力の見た目も統一） */
     .basic-row{
       display: grid;
       gap: 14px;
       grid-template-columns: 1fr;
-      align-items: start;
+      align-items: end;
     }
     @media (min-width: 720px){
       .basic-row{
-        grid-template-columns: 200px 1fr;
-        align-items: end;
+        grid-template-columns: 1fr 1fr;
       }
     }
     .date-input{
-      padding: 9px 10px;
-      font-size: 14.5px;
-      border-radius: 12px;
+      padding: 12px 12px;   /* ←氏名と同じ */
+      font-size: 16px;      /* ←氏名と同じ */
+      border-radius: var(--radius-md);
     }
-    .date-field{
-      margin-bottom: 10px;
-    }
+    .date-field{ margin-bottom: 14px; }
 
     .hint{
       font-size: 11.5px;
@@ -373,7 +369,6 @@
       color: var(--accent-2);
     }
 
-    /* 近くする/少し開ける：微調整 */
     .tight-gap{ gap: 10px !important; }
     .spacer-lg{ height: 10px; }
 
@@ -584,13 +579,11 @@
           </div>
         </div>
 
-        <!-- 対応中の顧客 + LINE対応状況 + 温度感 -->
+        <!-- LINE対応状況 + 温度感 -->
         <div class="section">
-          <div class="section-title">対応中の顧客 <span class="req">必須</span></div>
+          <div class="section-title big">LINE対応状況 <span class="req">必須</span></div>
 
-          <div class="section-title big" style="margin-top:6px;">LINE対応状況 <span class="req">必須</span></div>
-
-          <!-- 2列×2段（指定） -->
+          <!-- 横一列：現在対応数 / 本日新規担当数 -->
           <div class="grid-2">
             <div class="field">
               <div class="section-title">現在対応数 <span class="req">必須</span></div>
@@ -605,6 +598,7 @@
             </div>
           </div>
 
+          <!-- 横一列：追客数 / 追客反応数 -->
           <div class="grid-2">
             <div class="field">
               <div class="section-title">追客数 <span class="req">必須</span></div>
@@ -639,12 +633,9 @@
 
         <!-- 成約状況 -->
         <div class="section">
-          <div class="section-title big">
-            成約状況
-            <span class="hint">※身内の紹介を除く</span>
-          </div>
+          <div class="section-title big">成約状況</div>
+          <div class="section-sub">※身内の紹介を除く</div>
 
-          <!-- 累計：項目の間隔は近くする -->
           <div class="grid-2 tight-gap">
             <div class="field">
               <div class="section-title">累計成約数 <span class="req">必須</span></div>
@@ -666,10 +657,8 @@
             </div>
           </div>
 
-          <!-- 今月成約数と成約率（累計）の間隔を少し開ける -->
           <div class="spacer-lg"></div>
 
-          <!-- 今月：項目の間隔は近くする -->
           <div class="grid-2 tight-gap">
             <div class="field">
               <div class="section-title">今月の成約数 <span class="req">必須</span></div>
@@ -774,7 +763,6 @@
 
       const nonEmpty = (v) => String(v ?? "").trim().length > 0;
 
-      // 必須：高/中/低 と その他メモ 以外
       const validators = {
         date: () => !!form.date.value,
         name: () => nonEmpty(form.name.value),
