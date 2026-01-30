@@ -284,7 +284,7 @@
       .grid-3{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
 
-    /* 日付：白枠は氏名と同じ大きさ（入力の見た目も統一） */
+    /* 日付の枠：小さめ＆綺麗に（氏名よりコンパクト） */
     .basic-row{
       display: grid;
       gap: 14px;
@@ -293,15 +293,16 @@
     }
     @media (min-width: 720px){
       .basic-row{
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 220px 1fr;
+        align-items: end;
       }
     }
     .date-input{
-      padding: 12px 12px;   /* ←氏名と同じ */
-      font-size: 16px;      /* ←氏名と同じ */
-      border-radius: var(--radius-md);
+      padding: 9px 10px;
+      font-size: 14.5px;
+      border-radius: 12px;
     }
-    .date-field{ margin-bottom: 14px; }
+    .date-field{ margin-bottom: 10px; }
 
     .hint{
       font-size: 11.5px;
@@ -369,8 +370,64 @@
       color: var(--accent-2);
     }
 
+    /* 同じ枠内に2項目：センスよく */
+    .pair-card{
+      border-radius: 14px;
+      border: 1px solid rgba(31,157,99,0.18);
+      background: linear-gradient(135deg, #ffffff, #ffffff 55%, var(--accent-soft));
+      padding: 12px;
+      display: grid;
+      gap: 12px;
+      box-shadow: 0 8px 16px rgba(2,24,12,0.05);
+    }
+    @media (min-width: 720px){
+      .pair-card{
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+    }
+    .pair-item{
+      min-width: 0;
+      display: grid;
+      gap: 6px;
+      position: relative;
+    }
+    @media (min-width: 720px){
+      .pair-item:first-child::after{
+        content:"";
+        position:absolute;
+        right:-7px;
+        top: 6px;
+        bottom: 6px;
+        width: 1px;
+        background: rgba(0,0,0,0.06);
+      }
+    }
+    .pair-label{
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 0;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+    }
+    .pair-label .mini{
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+    .pair-item input[type="number"]{
+      padding: 11px 12px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+
     .tight-gap{ gap: 10px !important; }
     .spacer-lg{ height: 10px; }
+    .spacer-xl{ height: 18px; }
 
     footer{
       padding: 10px 18px 26px;
@@ -583,37 +640,56 @@
         <div class="section">
           <div class="section-title big">LINE対応状況 <span class="req">必須</span></div>
 
-          <!-- 横一列：現在対応数 / 本日新規担当数 -->
-          <div class="grid-2">
-            <div class="field">
-              <div class="section-title">現在対応数 <span class="req">必須</span></div>
-              <input id="lineNow" name="lineNow" type="number" inputmode="numeric" min="0" required />
-              <div class="error" data-error-for="lineNow">現在対応数を入力してください。</div>
-            </div>
+          <!-- 同じ枠内：現在対応数 / 新規担当数（本日） -->
+          <div class="field">
+            <div class="pair-card" role="group" aria-label="LINE対応状況 KPI">
+              <div class="pair-item">
+                <div class="pair-label">
+                  <span>現在対応数</span>
+                  <span class="mini"><span class="req">必須</span></span>
+                </div>
+                <input id="lineNow" name="lineNow" type="number" inputmode="numeric" min="0" required />
+                <div class="error" data-error-for="lineNow">現在対応数を入力してください。</div>
+              </div>
 
-            <div class="field">
-              <div class="section-title">本日新規担当数 <span class="req">必須</span></div>
-              <input id="lineNew" name="lineNew" type="number" inputmode="numeric" min="0" required />
-              <div class="error" data-error-for="lineNew">本日新規担当数を入力してください。</div>
+              <div class="pair-item">
+                <div class="pair-label">
+                  <span>新規担当数（本日）</span>
+                  <span class="mini"><span class="req">必須</span></span>
+                </div>
+                <input id="lineNew" name="lineNew" type="number" inputmode="numeric" min="0" required />
+                <div class="error" data-error-for="lineNew">新規担当数（本日）を入力してください。</div>
+              </div>
             </div>
           </div>
 
-          <!-- 横一列：追客数 / 追客反応数 -->
-          <div class="grid-2">
-            <div class="field">
-              <div class="section-title">追客数 <span class="req">必須</span></div>
-              <input id="lineFollow" name="lineFollow" type="number" inputmode="numeric" min="0" required />
-              <div class="error" data-error-for="lineFollow">追客数を入力してください。</div>
-            </div>
+          <!-- 同じ枠内：追客数 / 追客反応数 -->
+          <div class="field">
+            <div class="pair-card" role="group" aria-label="追客 KPI">
+              <div class="pair-item">
+                <div class="pair-label">
+                  <span>追客数</span>
+                  <span class="mini"><span class="req">必須</span></span>
+                </div>
+                <input id="lineFollow" name="lineFollow" type="number" inputmode="numeric" min="0" required />
+                <div class="error" data-error-for="lineFollow">追客数を入力してください。</div>
+              </div>
 
-            <div class="field">
-              <div class="section-title">追客反応数 <span class="req">必須</span></div>
-              <input id="lineFollowReact" name="lineFollowReact" type="number" inputmode="numeric" min="0" required />
-              <div class="error" data-error-for="lineFollowReact">追客反応数を入力してください。</div>
+              <div class="pair-item">
+                <div class="pair-label">
+                  <span>追客反応数</span>
+                  <span class="mini"><span class="req">必須</span></span>
+                </div>
+                <input id="lineFollowReact" name="lineFollowReact" type="number" inputmode="numeric" min="0" required />
+                <div class="error" data-error-for="lineFollowReact">追客反応数を入力してください。</div>
+              </div>
             </div>
           </div>
 
           <div class="divider"></div>
+
+          <div class="section-title big" style="margin-top:10px;">温度感</div>
+          <div class="section-sub">（名前＋状況）</div>
 
           <div class="grid-3">
             <div class="field">
@@ -657,7 +733,8 @@
             </div>
           </div>
 
-          <div class="spacer-lg"></div>
+          <!-- 距離を少し離す（成約率（累計） ↔ 今月の成約数） -->
+          <div class="spacer-xl"></div>
 
           <div class="grid-2 tight-gap">
             <div class="field">
@@ -688,7 +765,7 @@
             <textarea
               id="issues"
               name="issues"
-              placeholder="営業・SNS運用・運営などについて自由に記述してください。"
+              placeholder="具体的に記述してください。"
               required
             ></textarea>
             <div class="error" data-error-for="issues">現状の課題を入力してください。</div>
