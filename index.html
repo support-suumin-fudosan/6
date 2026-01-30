@@ -403,21 +403,17 @@
         background: rgba(0,0,0,0.06);
       }
     }
+
+    /* KPIラベルの文字サイズを「日付/氏名/本日の業務内容」と同じに */
     .pair-label{
       display: flex;
       align-items: baseline;
       justify-content: space-between;
       gap: 10px;
       margin: 0;
-      font-weight: 800;
+      font-weight: 700;
       letter-spacing: 0.01em;
-    }
-    .pair-label .mini{
-      font-size: 12px;
-      color: var(--muted);
-      font-weight: 800;
-      letter-spacing: 0.02em;
-      white-space: nowrap;
+      font-size: 15px; /* ← section-title と合わせる */
     }
     .pair-item input[type="number"]{
       padding: 11px 12px;
@@ -426,7 +422,6 @@
     }
 
     .tight-gap{ gap: 10px !important; }
-    .spacer-lg{ height: 10px; }
     .spacer-xl{ height: 18px; }
 
     footer{
@@ -513,6 +508,9 @@
       color: var(--muted);
     }
   </style>
+
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 
 <body>
@@ -573,7 +571,7 @@
           </section>
 
           <div class="thankyou-footnote">
-            ※このHTMLは「送信」部分を未接続です（必要ならEmailJS/スプレッドシート連携に拡張できます）
+            ※このフォームは EmailJS 送信に対応しています
           </div>
         </div>
       </div>
@@ -598,9 +596,9 @@
           </div>
         </div>
 
-        <!-- 本日の業務概要 -->
+        <!-- 本日の業務内容 -->
         <div class="section">
-          <div class="section-title">本日の業務概要 <span class="req">必須</span></div>
+          <div class="section-title">本日の業務内容 <span class="req">必須</span></div>
           <div class="field">
             <textarea
               id="summary"
@@ -608,7 +606,7 @@
               placeholder="内見（撮影）、内見（営業）、動画編集、見積もり作成、追客、架電など"
               required
             ></textarea>
-            <div class="error" data-error-for="summary">本日の業務概要を入力してください。</div>
+            <div class="error" data-error-for="summary">本日の業務内容を入力してください。</div>
           </div>
         </div>
 
@@ -640,13 +638,12 @@
         <div class="section">
           <div class="section-title big">LINE対応状況 <span class="req">必須</span></div>
 
-          <!-- 同じ枠内：現在対応数 / 新規担当数（本日） -->
+          <!-- 同じ枠内：現在対応数 / 新規担当数（本日＋） ※「必須」表示は削除 -->
           <div class="field">
             <div class="pair-card" role="group" aria-label="LINE対応状況 KPI">
               <div class="pair-item">
                 <div class="pair-label">
                   <span>現在対応数</span>
-                  <span class="mini"><span class="req">必須</span></span>
                 </div>
                 <input id="lineNow" name="lineNow" type="number" inputmode="numeric" min="0" required />
                 <div class="error" data-error-for="lineNow">現在対応数を入力してください。</div>
@@ -654,22 +651,20 @@
 
               <div class="pair-item">
                 <div class="pair-label">
-                  <span>新規担当数（本日）</span>
-                  <span class="mini"><span class="req">必須</span></span>
+                  <span>新規担当数（本日＋）</span>
                 </div>
                 <input id="lineNew" name="lineNew" type="number" inputmode="numeric" min="0" required />
-                <div class="error" data-error-for="lineNew">新規担当数（本日）を入力してください。</div>
+                <div class="error" data-error-for="lineNew">新規担当数（本日＋）を入力してください。</div>
               </div>
             </div>
           </div>
 
-          <!-- 同じ枠内：追客数 / 追客反応数 -->
+          <!-- 同じ枠内：追客数 / 追客反応数 ※「必須」表示は削除 -->
           <div class="field">
             <div class="pair-card" role="group" aria-label="追客 KPI">
               <div class="pair-item">
                 <div class="pair-label">
                   <span>追客数</span>
-                  <span class="mini"><span class="req">必須</span></span>
                 </div>
                 <input id="lineFollow" name="lineFollow" type="number" inputmode="numeric" min="0" required />
                 <div class="error" data-error-for="lineFollow">追客数を入力してください。</div>
@@ -678,7 +673,6 @@
               <div class="pair-item">
                 <div class="pair-label">
                   <span>追客反応数</span>
-                  <span class="mini"><span class="req">必須</span></span>
                 </div>
                 <input id="lineFollowReact" name="lineFollowReact" type="number" inputmode="numeric" min="0" required />
                 <div class="error" data-error-for="lineFollowReact">追客反応数を入力してください。</div>
@@ -733,7 +727,6 @@
             </div>
           </div>
 
-          <!-- 距離を少し離す（成約率（累計） ↔ 今月の成約数） -->
           <div class="spacer-xl"></div>
 
           <div class="grid-2 tight-gap">
@@ -815,6 +808,21 @@
 
   <script>
     (function(){
+      // EmailJS init
+      const EMAILJS_SERVICE_ID = "service_sgac4or";
+      const EMAILJS_TEMPLATE_ID = "template_hmmrh9t";
+      const EMAILJS_PUBLIC_KEY  = "QedlQxUXH2yDJJvjU";
+
+      try{
+        if (window.emailjs) {
+          // v4: emailjs.init({ publicKey })
+          emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+        }
+      }catch(e){
+        // fallback for older init signature
+        try{ if (window.emailjs) emailjs.init(EMAILJS_PUBLIC_KEY); }catch(_e){}
+      }
+
       const form = document.getElementById("dailyReportForm");
       const msg = document.getElementById("formMsg");
       const hero = document.getElementById("heroSection");
@@ -1034,22 +1042,26 @@
           submitBtn.style.filter = "grayscale(0.15)";
         }
 
-        msg.textContent = "送信準備中…";
+        msg.textContent = "送信中…";
 
         try{
           const payload = buildPayload();
           console.log("DailyReport payload:", payload);
 
-          // ここは未接続：必要なら EmailJS / GAS / スプレッドシートへ送信処理を差し込み
-          // 例：fetch("YOUR_ENDPOINT", { method:"POST", headers:{...}, body: JSON.stringify(payload) })
+          if (!window.emailjs) {
+            throw new Error("EmailJSが読み込まれていません。");
+          }
+
+          // EmailJSへ送信（テンプレ側で {{date}} {{name}} など参照可能）
+          await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, payload);
 
           msg.textContent = "完了しました。";
           showThankYouView();
 
         }catch(err){
           console.error(err);
-          msg.textContent = "処理に失敗しました。もう一度お試しください。";
-          alert("処理に失敗しました。もう一度お試しください。");
+          msg.textContent = "送信に失敗しました。もう一度お試しください。";
+          alert("送信に失敗しました。もう一度お試しください。");
         }finally{
           if (submitBtn) {
             submitBtn.disabled = false;
