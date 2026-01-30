@@ -211,6 +211,12 @@
       font-size: 15px;
       font-weight: 700;
     }
+    /* セクション見出しをやや大きめに（指定：基本情報 / LINE対応状況 / 成約状況） */
+    .section-title.big{
+      font-size: 16.5px;
+      letter-spacing: 0.01em;
+    }
+
     .section-title .req{
       color: var(--danger);
       font-size: 12px;
@@ -279,30 +285,26 @@
       .grid-3{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
 
-    .grid-4{
-      display: grid;
-      gap: 16px;
-      grid-template-columns: 1fr;
-    }
-    @media (min-width: 720px){
-      .grid-4{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    }
-
-    /* 日付だけ小さく綺麗に */
+    /* 日付の枠のレイアウトを綺麗に少し小さくする */
     .basic-row{
       display: grid;
-      gap: 16px;
+      gap: 14px;
       grid-template-columns: 1fr;
+      align-items: start;
     }
     @media (min-width: 720px){
       .basic-row{
-        grid-template-columns: 220px 1fr;
+        grid-template-columns: 200px 1fr;
         align-items: end;
       }
     }
     .date-input{
-      padding: 10px 12px;
-      font-size: 15px;
+      padding: 9px 10px;
+      font-size: 14.5px;
+      border-radius: 12px;
+    }
+    .date-field{
+      margin-bottom: 10px;
     }
 
     .hint{
@@ -370,6 +372,10 @@
       font-weight: 800;
       color: var(--accent-2);
     }
+
+    /* 近くする/少し開ける：微調整 */
+    .tight-gap{ gap: 10px !important; }
+    .spacer-lg{ height: 10px; }
 
     footer{
       padding: 10px 18px 26px;
@@ -523,10 +529,10 @@
       <form id="dailyReportForm" novalidate>
         <!-- 基本情報 -->
         <div class="section">
-          <div class="section-title">基本情報</div>
+          <div class="section-title big">基本情報</div>
 
           <div class="basic-row">
-            <div class="field">
+            <div class="field date-field">
               <div class="section-title">日付 <span class="req">必須</span></div>
               <input id="date" name="date" type="date" class="date-input" required />
               <div class="error" data-error-for="date">日付を入力してください。</div>
@@ -547,7 +553,7 @@
             <textarea
               id="summary"
               name="summary"
-              placeholder="内見、動画編集、見積もり作成、追客など"
+              placeholder="内見（撮影）、内見（営業）、動画編集、見積もり作成、追客、架電など"
               required
             ></textarea>
             <div class="error" data-error-for="summary">本日の業務概要を入力してください。</div>
@@ -581,10 +587,11 @@
         <!-- 対応中の顧客 + LINE対応状況 + 温度感 -->
         <div class="section">
           <div class="section-title">対応中の顧客 <span class="req">必須</span></div>
-          <div class="section-sub">名前、状況、温度感など</div>
 
-          <div class="section-title" style="margin-top:6px;">LINE対応状況 <span class="req">必須</span></div>
-          <div class="grid-4">
+          <div class="section-title big" style="margin-top:6px;">LINE対応状況 <span class="req">必須</span></div>
+
+          <!-- 2列×2段（指定） -->
+          <div class="grid-2">
             <div class="field">
               <div class="section-title">現在対応数 <span class="req">必須</span></div>
               <input id="lineNow" name="lineNow" type="number" inputmode="numeric" min="0" required />
@@ -596,7 +603,9 @@
               <input id="lineNew" name="lineNew" type="number" inputmode="numeric" min="0" required />
               <div class="error" data-error-for="lineNew">本日新規担当数を入力してください。</div>
             </div>
+          </div>
 
+          <div class="grid-2">
             <div class="field">
               <div class="section-title">追客数 <span class="req">必須</span></div>
               <input id="lineFollow" name="lineFollow" type="number" inputmode="numeric" min="0" required />
@@ -630,9 +639,13 @@
 
         <!-- 成約状況 -->
         <div class="section">
-          <div class="section-title">成約状況</div>
+          <div class="section-title big">
+            成約状況
+            <span class="hint">※身内の紹介を除く</span>
+          </div>
 
-          <div class="grid-2">
+          <!-- 累計：項目の間隔は近くする -->
+          <div class="grid-2 tight-gap">
             <div class="field">
               <div class="section-title">累計成約数 <span class="req">必須</span></div>
               <input id="dealTotal" name="dealTotal" type="number" inputmode="numeric" min="0" required />
@@ -653,7 +666,11 @@
             </div>
           </div>
 
-          <div class="grid-2">
+          <!-- 今月成約数と成約率（累計）の間隔を少し開ける -->
+          <div class="spacer-lg"></div>
+
+          <!-- 今月：項目の間隔は近くする -->
+          <div class="grid-2 tight-gap">
             <div class="field">
               <div class="section-title">今月の成約数 <span class="req">必須</span></div>
               <input id="dealMonth" name="dealMonth" type="number" inputmode="numeric" min="0" required />
