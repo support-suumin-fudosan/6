@@ -128,29 +128,6 @@
       display: none;
     }
 
-    .brand-license{
-      display: block;
-      font-size: 10px;
-      color: var(--muted);
-      margin-top: 2px;
-      letter-spacing: 0.02em;
-    }
-
-    .pill-note{
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 8px;
-      white-space: nowrap;
-      flex: 0 0 auto;
-    }
-
     .container{
       width: 100%;
       max-width: 920px;
@@ -211,12 +188,6 @@
       letter-spacing: 0.01em;
     }
 
-    .hero p{
-      margin: 0 0 6px;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
     form{
       margin-top: 18px;
       background: var(--card);
@@ -245,6 +216,11 @@
       font-size: 12px;
       font-weight: 700;
     }
+    .section-title .opt{
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
     .section-sub{
       margin: -6px 0 12px;
       font-size: 12px;
@@ -256,12 +232,6 @@
       gap: 8px;
       margin-bottom: 14px;
       min-width: 0;
-    }
-
-    label.small{
-      font-size: 12px;
-      color: var(--muted);
-      font-weight: 600;
     }
 
     input[type="text"],
@@ -309,6 +279,32 @@
       .grid-3{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
 
+    .grid-4{
+      display: grid;
+      gap: 16px;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 720px){
+      .grid-4{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+
+    /* 日付だけ小さく綺麗に */
+    .basic-row{
+      display: grid;
+      gap: 16px;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 720px){
+      .basic-row{
+        grid-template-columns: 220px 1fr;
+        align-items: end;
+      }
+    }
+    .date-input{
+      padding: 10px 12px;
+      font-size: 15px;
+    }
+
     .hint{
       font-size: 11.5px;
       color: var(--muted);
@@ -354,13 +350,6 @@
       height: 1px;
       background: rgba(0,0,0,0.04);
       margin: 10px 0 2px;
-    }
-
-    .mini-card{
-      border: 1px solid rgba(0,0,0,0.06);
-      border-radius: 12px;
-      padding: 12px;
-      background: #fff;
     }
 
     .kpi{
@@ -484,10 +473,8 @@
 
             <div>
               <div>日報 回答フォーム</div>
-              <span class="brand-license">入力内容は社内共有用です（外部公開しません）</span>
             </div>
           </div>
-          <div class="pill-note">約2分で入力</div>
         </div>
 
         <div class="header-thanks" id="headerThanks">
@@ -500,8 +487,7 @@
       <section class="hero" id="heroSection">
         <div class="hero-head">
           <span class="meta">日報を記入してください</span>
-          <h1>その日の「状況」を<br>一発で共有する</h1>
-          <p>数字と温度感が揃うと、次の一手が早くなります。</p>
+          <h1>お疲れさまです😖</h1>
         </div>
       </section>
 
@@ -520,7 +506,7 @@
 
             <p class="thankyou-body">
               共有ありがとうございます。<br>
-              数字・温度感・課題が揃うと、チームの判断が速くなります。
+              反映・確認します。
             </p>
 
             <p class="thankyou-secondary">
@@ -538,16 +524,17 @@
         <!-- 基本情報 -->
         <div class="section">
           <div class="section-title">基本情報</div>
-          <div class="grid-2">
+
+          <div class="basic-row">
             <div class="field">
               <div class="section-title">日付 <span class="req">必須</span></div>
-              <input id="date" name="date" type="date" required />
+              <input id="date" name="date" type="date" class="date-input" required />
               <div class="error" data-error-for="date">日付を入力してください。</div>
             </div>
 
             <div class="field">
               <div class="section-title">氏名 <span class="req">必須</span></div>
-              <input id="name" name="name" type="text" placeholder="例：榊 ねお" required />
+              <input id="name" name="name" type="text" required />
               <div class="error" data-error-for="name">氏名を入力してください。</div>
             </div>
           </div>
@@ -555,60 +542,88 @@
 
         <!-- 本日の業務概要 -->
         <div class="section">
-          <div class="section-title">本日の業務概要</div>
-          <div class="section-sub">箇条書きでOK（例：・内見3件 ・見積もり作成 ・追客 など）</div>
+          <div class="section-title">本日の業務概要 <span class="req">必須</span></div>
           <div class="field">
             <textarea
               id="summary"
               name="summary"
-              placeholder="・&#10;・&#10;・"
+              placeholder="内見、動画編集、見積もり作成、追客など"
+              required
             ></textarea>
+            <div class="error" data-error-for="summary">本日の業務概要を入力してください。</div>
           </div>
         </div>
 
-        <!-- 契約関係の進捗報告 -->
+        <!-- 契約関係の進捗 -->
         <div class="section">
-          <div class="section-title">契約関係の進捗報告</div>
-          <div class="section-sub">（案件名＋フェーズ）をそのまま貼れる形にしています</div>
+          <div class="section-title">契約関係の進捗 <span class="req">必須</span></div>
+          <div class="section-sub">（案件名＋フェーズ）</div>
 
           <div class="field">
             <textarea
               id="contractProgress"
               name="contractProgress"
-              placeholder="・〇〇様：&#10;・△△様：&#10;・□□様："
+              placeholder="〇〇様：&#10;△△様：&#10;××様："
+              required
             ></textarea>
+            <div class="error" data-error-for="contractProgress">契約関係の進捗を入力してください。</div>
           </div>
 
           <div class="grid-2">
             <div class="field">
-              <div class="section-title">進行中合計（件） <span class="hint">任意</span></div>
-              <input id="contractTotal" name="contractTotal" type="number" inputmode="numeric" min="0" placeholder="例：5" />
-            </div>
-
-            <div class="field">
-              <div class="section-title">補足メモ <span class="hint">任意</span></div>
-              <input id="contractNote" name="contractNote" type="text" placeholder="例：要審査書類待ち / 管理会社回答待ち など" />
+              <div class="section-title">進行中合計 <span class="req">必須</span></div>
+              <input id="contractTotal" name="contractTotal" type="number" inputmode="numeric" min="0" required />
+              <div class="error" data-error-for="contractTotal">進行中合計を入力してください。</div>
             </div>
           </div>
         </div>
 
-        <!-- 温度感 -->
+        <!-- 対応中の顧客 + LINE対応状況 + 温度感 -->
         <div class="section">
-          <div class="section-title">対応中顧客の状況（温度感）</div>
-          <div class="section-sub">「名前＋状況」を短く。多いならコピペで追加してOK。</div>
+          <div class="section-title">対応中の顧客 <span class="req">必須</span></div>
+          <div class="section-sub">名前、状況、温度感など</div>
+
+          <div class="section-title" style="margin-top:6px;">LINE対応状況 <span class="req">必須</span></div>
+          <div class="grid-4">
+            <div class="field">
+              <div class="section-title">現在対応数 <span class="req">必須</span></div>
+              <input id="lineNow" name="lineNow" type="number" inputmode="numeric" min="0" required />
+              <div class="error" data-error-for="lineNow">現在対応数を入力してください。</div>
+            </div>
+
+            <div class="field">
+              <div class="section-title">本日新規担当数 <span class="req">必須</span></div>
+              <input id="lineNew" name="lineNew" type="number" inputmode="numeric" min="0" required />
+              <div class="error" data-error-for="lineNew">本日新規担当数を入力してください。</div>
+            </div>
+
+            <div class="field">
+              <div class="section-title">追客数 <span class="req">必須</span></div>
+              <input id="lineFollow" name="lineFollow" type="number" inputmode="numeric" min="0" required />
+              <div class="error" data-error-for="lineFollow">追客数を入力してください。</div>
+            </div>
+
+            <div class="field">
+              <div class="section-title">追客反応数 <span class="req">必須</span></div>
+              <input id="lineFollowReact" name="lineFollowReact" type="number" inputmode="numeric" min="0" required />
+              <div class="error" data-error-for="lineFollowReact">追客反応数を入力してください。</div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
 
           <div class="grid-3">
             <div class="field">
-              <div class="section-title">【高】</div>
-              <textarea id="tempHigh" name="tempHigh" placeholder="・&#10;・"></textarea>
+              <div class="section-title">【高】 <span class="opt">任意</span></div>
+              <textarea id="tempHigh" name="tempHigh"></textarea>
             </div>
             <div class="field">
-              <div class="section-title">【中】</div>
-              <textarea id="tempMid" name="tempMid" placeholder="・&#10;・"></textarea>
+              <div class="section-title">【中】 <span class="opt">任意</span></div>
+              <textarea id="tempMid" name="tempMid"></textarea>
             </div>
             <div class="field">
-              <div class="section-title">【低】</div>
-              <textarea id="tempLow" name="tempLow" placeholder="・&#10;・"></textarea>
+              <div class="section-title">【低】 <span class="opt">任意</span></div>
+              <textarea id="tempLow" name="tempLow"></textarea>
             </div>
           </div>
         </div>
@@ -616,110 +631,91 @@
         <!-- 成約状況 -->
         <div class="section">
           <div class="section-title">成約状況</div>
-          <div class="section-sub">数字を入れると成約率を自動計算します</div>
 
           <div class="grid-2">
             <div class="field">
-              <div class="section-title">本日成約（件） <span class="hint">任意</span></div>
-              <input id="dealToday" name="dealToday" type="number" inputmode="numeric" min="0" placeholder="例：1" />
+              <div class="section-title">累計成約数 <span class="req">必須</span></div>
+              <input id="dealTotal" name="dealTotal" type="number" inputmode="numeric" min="0" required />
+              <div class="error" data-error-for="dealTotal">累計成約数を入力してください。</div>
             </div>
+
             <div class="field">
-              <div class="section-title">今月成約累計（件） <span class="hint">任意</span></div>
-              <input id="dealMonth" name="dealMonth" type="number" inputmode="numeric" min="0" placeholder="例：12" />
+              <div class="section-title">累計対応顧客数 <span class="req">必須</span></div>
+              <input id="custTotal" name="custTotal" type="number" inputmode="numeric" min="0" required />
+              <div class="error" data-error-for="custTotal">累計対応顧客数を入力してください。</div>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="kpi" aria-live="polite">
+              <strong>成約率（累計）</strong>
+              <div class="val" id="conversionRateTotal">— %</div>
             </div>
           </div>
 
           <div class="grid-2">
             <div class="field">
-              <div class="section-title">今まで対応した顧客数（累計・名） <span class="hint">任意</span></div>
-              <input id="custTotal" name="custTotal" type="number" inputmode="numeric" min="0" placeholder="例：240" />
+              <div class="section-title">今月の成約数 <span class="req">必須</span></div>
+              <input id="dealMonth" name="dealMonth" type="number" inputmode="numeric" min="0" required />
+              <div class="error" data-error-for="dealMonth">今月の成約数を入力してください。</div>
             </div>
+
             <div class="field">
-              <div class="section-title">今月対応顧客数（名） <span class="hint">任意</span></div>
-              <input id="custMonth" name="custMonth" type="number" inputmode="numeric" min="0" placeholder="例：80" />
+              <div class="section-title">今月の対応顧客数 <span class="req">必須</span></div>
+              <input id="custMonth" name="custMonth" type="number" inputmode="numeric" min="0" required />
+              <div class="error" data-error-for="custMonth">今月の対応顧客数を入力してください。</div>
             </div>
           </div>
 
           <div class="field">
             <div class="kpi" aria-live="polite">
               <strong>成約率（今月）</strong>
-              <div class="val" id="conversionRate">— %</div>
-            </div>
-            <div class="hint">→ 今月成約累計 ÷ 今月対応顧客数</div>
-          </div>
-        </div>
-
-        <!-- LINE対応状況 -->
-        <div class="section">
-          <div class="section-title">LINE対応状況</div>
-          <div class="grid-3">
-            <div class="field">
-              <div class="section-title">現在対応中（名） <span class="hint">任意</span></div>
-              <input id="lineNow" name="lineNow" type="number" inputmode="numeric" min="0" placeholder="例：18" />
-            </div>
-            <div class="field">
-              <div class="section-title">本日新規反響（名） <span class="hint">任意</span></div>
-              <input id="lineNew" name="lineNew" type="number" inputmode="numeric" min="0" placeholder="例：6" />
-            </div>
-            <div class="field">
-              <div class="section-title">追客中（名） <span class="hint">任意</span></div>
-              <input id="lineFollow" name="lineFollow" type="number" inputmode="numeric" min="0" placeholder="例：10" />
+              <div class="val" id="conversionRateMonth">— %</div>
             </div>
           </div>
         </div>
 
         <!-- 現状の課題 -->
         <div class="section">
-          <div class="section-title">現状の課題</div>
-          <div class="section-sub">詰まってる点・遅れてる理由・再発しそうなリスクを書いておくと強い</div>
+          <div class="section-title">現状の課題 <span class="req">必須</span></div>
           <div class="field">
             <textarea
               id="issues"
               name="issues"
-              placeholder="・&#10;・&#10;・"
+              placeholder="営業・SNS運用・運営などについて自由に記述してください。"
+              required
             ></textarea>
+            <div class="error" data-error-for="issues">現状の課題を入力してください。</div>
           </div>
         </div>
 
-        <!-- 改善案・明日の取り組み -->
+        <!-- 改善案 -->
         <div class="section">
-          <div class="section-title">改善案・明日の取り組み</div>
-          <div class="section-sub">明日「何を変えるか」を具体化</div>
+          <div class="section-title">改善案 <span class="req">必須</span></div>
           <div class="field">
             <textarea
               id="improvements"
               name="improvements"
-              placeholder="・&#10;・&#10;・"
+              placeholder="具体的に記述してください。"
+              required
             ></textarea>
+            <div class="error" data-error-for="improvements">改善案を入力してください。</div>
           </div>
         </div>
 
         <!-- 明日の予定 -->
         <div class="section">
-          <div class="section-title">明日の予定</div>
-          <div class="section-sub">予定の粒度は自由（場所・時間・顧客名など）</div>
-
-          <div class="grid-2">
-            <div class="field">
-              <div class="section-title">内見 <span class="hint">任意</span></div>
-              <textarea id="planViewing" name="planViewing" placeholder="例：13:00 新宿（〇〇様）&#10;例：16:30 中野（△△様）"></textarea>
-            </div>
-            <div class="field">
-              <div class="section-title">撮影 <span class="hint">任意</span></div>
-              <textarea id="planShooting" name="planShooting" placeholder="例：午前 〇〇沿線 3物件&#10;例：夕方 ルームツアー2本"></textarea>
-            </div>
-          </div>
-
+          <div class="section-title">明日の予定 <span class="req">必須</span></div>
           <div class="field">
-            <div class="section-title">契約対応 <span class="hint">任意</span></div>
-            <textarea id="planContract" name="planContract" placeholder="例：重要事項説明 / 申込書回収 / 審査フォロー など"></textarea>
+            <textarea id="tomorrowPlan" name="tomorrowPlan" required></textarea>
+            <div class="error" data-error-for="tomorrowPlan">明日の予定を入力してください。</div>
           </div>
 
           <div class="divider"></div>
 
           <div class="field">
-            <div class="section-title">その他メモ <span class="hint">任意</span></div>
-            <textarea id="memo" name="memo" placeholder="気づき / 共有したいこと / 明日ひとこと など"></textarea>
+            <div class="section-title">その他メモ <span class="opt">任意</span></div>
+            <textarea id="memo" name="memo" placeholder="気づき / 共有したいことなど"></textarea>
           </div>
         </div>
 
@@ -752,15 +748,80 @@
         el.style.display = on ? "block" : "none";
       };
 
+      const toNumOrNaN = (v) => {
+        const s = String(v ?? "").trim();
+        if (s === "") return NaN;
+        const n = Number(s);
+        return Number.isFinite(n) ? n : NaN;
+      };
+
+      const nonEmpty = (v) => String(v ?? "").trim().length > 0;
+
+      // 必須：高/中/低 と その他メモ 以外
       const validators = {
         date: () => !!form.date.value,
-        name: () => form.name.value.trim().length > 0
+        name: () => nonEmpty(form.name.value),
+        summary: () => nonEmpty(form.summary.value),
+        contractProgress: () => nonEmpty(form.contractProgress.value),
+        contractTotal: () => {
+          const n = toNumOrNaN(form.contractTotal.value);
+          return !Number.isNaN(n) && n >= 0;
+        },
+
+        lineNow: () => {
+          const n = toNumOrNaN(form.lineNow.value);
+          return !Number.isNaN(n) && n >= 0;
+        },
+        lineNew: () => {
+          const n = toNumOrNaN(form.lineNew.value);
+          return !Number.isNaN(n) && n >= 0;
+        },
+        lineFollow: () => {
+          const n = toNumOrNaN(form.lineFollow.value);
+          return !Number.isNaN(n) && n >= 0;
+        },
+        lineFollowReact: () => {
+          const n = toNumOrNaN(form.lineFollowReact.value);
+          return !Number.isNaN(n) && n >= 0;
+        },
+
+        dealTotal: () => {
+          const n = toNumOrNaN(form.dealTotal.value);
+          return !Number.isNaN(n) && n >= 0;
+        },
+        custTotal: () => {
+          const n = toNumOrNaN(form.custTotal.value);
+          return !Number.isNaN(n) && n >= 0;
+        },
+        dealMonth: () => {
+          const n = toNumOrNaN(form.dealMonth.value);
+          return !Number.isNaN(n) && n >= 0;
+        },
+        custMonth: () => {
+          const n = toNumOrNaN(form.custMonth.value);
+          return !Number.isNaN(n) && n >= 0;
+        },
+
+        issues: () => nonEmpty(form.issues.value),
+        improvements: () => nonEmpty(form.improvements.value),
+        tomorrowPlan: () => nonEmpty(form.tomorrowPlan.value)
       };
+
+      const REQUIRED_KEYS = [
+        "date","name",
+        "summary",
+        "contractProgress","contractTotal",
+        "lineNow","lineNew","lineFollow","lineFollowReact",
+        "dealTotal","custTotal","dealMonth","custMonth",
+        "issues","improvements",
+        "tomorrowPlan"
+      ];
 
       const validateAll = () => {
         let ok = true;
-        ["date","name"].forEach(k => showError(k, false));
-        ["date","name"].forEach(k => {
+        REQUIRED_KEYS.forEach(k => showError(k, false));
+
+        REQUIRED_KEYS.forEach(k => {
           const pass = validators[k]();
           if (!pass) { showError(k, true); ok = false; }
         });
@@ -779,29 +840,30 @@
         return `${y}-${m}-${day} ${h}:${min}:${s}`;
       };
 
-      const toNum = (v) => {
-        const n = Number(String(v ?? "").trim());
-        return Number.isFinite(n) ? n : 0;
+      const rateText = (num, den) => {
+        if (!(den > 0)) return "— %";
+        const r = (num / den) * 100;
+        const rounded = Math.round(r * 10) / 10;
+        return `${rounded.toFixed(1)} %`;
       };
 
-      const updateConversion = () => {
-        const dealMonth = toNum(form.dealMonth.value);
-        const custMonth = toNum(form.custMonth.value);
-        const el = document.getElementById("conversionRate");
-        if (!el) return;
+      const updateRates = () => {
+        const dealTotal = Number.isFinite(Number(form.dealTotal.value)) ? Number(form.dealTotal.value) : 0;
+        const custTotal = Number.isFinite(Number(form.custTotal.value)) ? Number(form.custTotal.value) : 0;
+        const dealMonth = Number.isFinite(Number(form.dealMonth.value)) ? Number(form.dealMonth.value) : 0;
+        const custMonth = Number.isFinite(Number(form.custMonth.value)) ? Number(form.custMonth.value) : 0;
 
-        if (custMonth <= 0) {
-          el.textContent = "— %";
-          return;
-        }
-        const rate = (dealMonth / custMonth) * 100;
-        const rounded = Math.round(rate * 10) / 10;
-        el.textContent = `${rounded.toFixed(1)} %`;
+        const elTotal = document.getElementById("conversionRateTotal");
+        const elMonth = document.getElementById("conversionRateMonth");
+        if (elTotal) elTotal.textContent = rateText(dealTotal, custTotal);
+        if (elMonth) elMonth.textContent = rateText(dealMonth, custMonth);
       };
 
-      form.dealMonth.addEventListener("input", updateConversion);
-      form.custMonth.addEventListener("input", updateConversion);
-      updateConversion();
+      ["dealTotal","custTotal","dealMonth","custMonth"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener("input", updateRates);
+      });
+      updateRates();
 
       const buildPayload = () => {
         return {
@@ -810,32 +872,30 @@
           name: form.name.value.trim(),
 
           summary: form.summary.value,
-
           contractProgress: form.contractProgress.value,
           contractTotal: form.contractTotal.value,
-          contractNote: form.contractNote.value.trim(),
+
+          lineNow: form.lineNow.value,
+          lineNew: form.lineNew.value,
+          lineFollow: form.lineFollow.value,
+          lineFollowReact: form.lineFollowReact.value,
 
           tempHigh: form.tempHigh.value,
           tempMid: form.tempMid.value,
           tempLow: form.tempLow.value,
 
-          dealToday: form.dealToday.value,
-          dealMonth: form.dealMonth.value,
+          dealTotal: form.dealTotal.value,
           custTotal: form.custTotal.value,
-          custMonth: form.custMonth.value,
-          conversionRate: document.getElementById("conversionRate")?.textContent ?? "",
+          conversionRateTotal: document.getElementById("conversionRateTotal")?.textContent ?? "",
 
-          lineNow: form.lineNow.value,
-          lineNew: form.lineNew.value,
-          lineFollow: form.lineFollow.value,
+          dealMonth: form.dealMonth.value,
+          custMonth: form.custMonth.value,
+          conversionRateMonth: document.getElementById("conversionRateMonth")?.textContent ?? "",
 
           issues: form.issues.value,
           improvements: form.improvements.value,
 
-          planViewing: form.planViewing.value,
-          planShooting: form.planShooting.value,
-          planContract: form.planContract.value,
-
+          tomorrowPlan: form.tomorrowPlan.value,
           memo: form.memo.value
         };
       };
@@ -865,8 +925,17 @@
       };
 
       const wireLiveClear = () => {
-        form.date.addEventListener("change", () => { if (validators.date()) showError("date", false); });
-        form.name.addEventListener("input",  () => { if (validators.name()) showError("name", false); });
+        REQUIRED_KEYS.forEach((k) => {
+          const node = form[k];
+          if (!node) return;
+          const evt = (node.tagName === "SELECT") ? "change" : "input";
+          node.addEventListener(evt, () => {
+            if (validators[k]()) showError(k, false);
+          });
+          node.addEventListener("blur", () => {
+            if (validators[k]()) showError(k, false);
+          });
+        });
       };
       wireLiveClear();
 
@@ -908,9 +977,9 @@
       });
 
       form.addEventListener("reset", () => {
-        ["date","name"].forEach(k => showError(k, false));
+        REQUIRED_KEYS.forEach(k => showError(k, false));
         msg.textContent = "";
-        setTimeout(updateConversion, 0);
+        setTimeout(updateRates, 0);
       });
 
       // 初回：日付を今日にセット（ユーザーが触ってなければ）
