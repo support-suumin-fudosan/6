@@ -226,10 +226,19 @@
       font-size: 12px;
       font-weight: 700;
     }
+
     .section-sub{
       margin: -6px 0 12px;
       font-size: 12px;
       color: var(--muted);
+    }
+
+    /* 追加：注釈（KPI下の小さめテキスト） */
+    .note{
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: -2px;
+      line-height: 1.5;
     }
 
     .field{
@@ -284,7 +293,7 @@
       .grid-3{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
 
-    /* 日付の枠：小さめ＆綺麗に（氏名よりコンパクト） */
+    /* 日付の枠：横長な丸枠（四角枠じゃなく） */
     .basic-row{
       display: grid;
       gap: 14px;
@@ -293,14 +302,14 @@
     }
     @media (min-width: 720px){
       .basic-row{
-        grid-template-columns: 220px 1fr;
+        grid-template-columns: 260px 1fr;
         align-items: end;
       }
     }
     .date-input{
-      padding: 9px 10px;
+      padding: 10px 14px;
       font-size: 14.5px;
-      border-radius: 12px;
+      border-radius: 999px; /* ←丸枠 */
     }
     .date-field{ margin-bottom: 10px; }
 
@@ -404,7 +413,7 @@
       }
     }
 
-    /* KPIラベルの文字サイズを「日付/氏名/本日の業務内容」と同じに */
+    /* KPIラベル文字は section-title と同じサイズ */
     .pair-label{
       display: flex;
       align-items: baseline;
@@ -413,7 +422,7 @@
       margin: 0;
       font-weight: 700;
       letter-spacing: 0.01em;
-      font-size: 15px; /* ← section-title と合わせる */
+      font-size: 15px;
     }
     .pair-item input[type="number"]{
       padding: 11px 12px;
@@ -638,13 +647,14 @@
         <div class="section">
           <div class="section-title big">LINE対応状況 <span class="req">必須</span></div>
 
-          <!-- 同じ枠内：現在対応数 / 新規担当数（本日＋） ※「必須」表示は削除 -->
+          <!-- 同じ枠内：現在対応数 / 新規担当数（本日＋） -->
           <div class="field">
             <div class="pair-card" role="group" aria-label="LINE対応状況 KPI">
               <div class="pair-item">
                 <div class="pair-label">
                   <span>現在対応数</span>
                 </div>
+                <div class="note">※既読無視から48時間経過した顧客を除く</div>
                 <input id="lineNow" name="lineNow" type="number" inputmode="numeric" min="0" required />
                 <div class="error" data-error-for="lineNow">現在対応数を入力してください。</div>
               </div>
@@ -659,7 +669,7 @@
             </div>
           </div>
 
-          <!-- 同じ枠内：追客数 / 追客反応数 ※「必須」表示は削除 -->
+          <!-- 同じ枠内：追客数 / 追客反応数 -->
           <div class="field">
             <div class="pair-card" role="group" aria-label="追客 KPI">
               <div class="pair-item">
@@ -674,6 +684,7 @@
                 <div class="pair-label">
                   <span>追客反応数</span>
                 </div>
+                <div class="note">※追客から48時間以内に反応した顧客</div>
                 <input id="lineFollowReact" name="lineFollowReact" type="number" inputmode="numeric" min="0" required />
                 <div class="error" data-error-for="lineFollowReact">追客反応数を入力してください。</div>
               </div>
@@ -683,7 +694,7 @@
           <div class="divider"></div>
 
           <div class="section-title big" style="margin-top:10px;">温度感</div>
-          <div class="section-sub">（名前＋状況）</div>
+          <div class="section-sub">（顧客名＋状況）</div>
 
           <div class="grid-3">
             <div class="field">
@@ -708,15 +719,16 @@
 
           <div class="grid-2 tight-gap">
             <div class="field">
-              <div class="section-title">累計成約数 <span class="req">必須</span></div>
+              <div class="section-title">成約数（累計） <span class="req">必須</span></div>
               <input id="dealTotal" name="dealTotal" type="number" inputmode="numeric" min="0" required />
-              <div class="error" data-error-for="dealTotal">累計成約数を入力してください。</div>
+              <div class="error" data-error-for="dealTotal">成約数（累計）を入力してください。</div>
             </div>
 
             <div class="field">
-              <div class="section-title">累計対応顧客数 <span class="req">必須</span></div>
+              <div class="section-title">対応顧客数（累計） <span class="req">必須</span></div>
+              <div class="note">※1度でも返信があったすべての顧客</div>
               <input id="custTotal" name="custTotal" type="number" inputmode="numeric" min="0" required />
-              <div class="error" data-error-for="custTotal">累計対応顧客数を入力してください。</div>
+              <div class="error" data-error-for="custTotal">対応顧客数（累計）を入力してください。</div>
             </div>
           </div>
 
@@ -731,15 +743,16 @@
 
           <div class="grid-2 tight-gap">
             <div class="field">
-              <div class="section-title">今月の成約数 <span class="req">必須</span></div>
+              <div class="section-title">成約数（今月） <span class="req">必須</span></div>
               <input id="dealMonth" name="dealMonth" type="number" inputmode="numeric" min="0" required />
-              <div class="error" data-error-for="dealMonth">今月の成約数を入力してください。</div>
+              <div class="error" data-error-for="dealMonth">成約数（今月）を入力してください。</div>
             </div>
 
             <div class="field">
-              <div class="section-title">今月の対応顧客数 <span class="req">必須</span></div>
+              <div class="section-title">対応顧客数（今月） <span class="req">必須</span></div>
+              <div class="note">※1度でも返信があったすべての顧客</div>
               <input id="custMonth" name="custMonth" type="number" inputmode="numeric" min="0" required />
-              <div class="error" data-error-for="custMonth">今月の対応顧客数を入力してください。</div>
+              <div class="error" data-error-for="custMonth">対応顧客数（今月）を入力してください。</div>
             </div>
           </div>
 
@@ -815,11 +828,9 @@
 
       try{
         if (window.emailjs) {
-          // v4: emailjs.init({ publicKey })
           emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
         }
       }catch(e){
-        // fallback for older init signature
         try{ if (window.emailjs) emailjs.init(EMAILJS_PUBLIC_KEY); }catch(_e){}
       }
 
@@ -1052,7 +1063,6 @@
             throw new Error("EmailJSが読み込まれていません。");
           }
 
-          // EmailJSへ送信（テンプレ側で {{date}} {{name}} など参照可能）
           await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, payload);
 
           msg.textContent = "完了しました。";
