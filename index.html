@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>契約情報 回答フォーム</title>
-  <meta name="description" content="契約情報を1分ほどで入力できる回答フォームです。" />
+  <title>日報 回答フォーム</title>
+  <meta name="description" content="日報を入力できる回答フォームです。" />
 
   <style>
     :root{
@@ -232,11 +232,6 @@
     }
     .section:first-child{ border-top: none; }
 
-    .section.contact-section{
-      border-top: 1px dotted rgba(0,0,0,0.14);
-      padding-top: 16px;
-    }
-
     .section-title{
       display: flex;
       align-items: baseline;
@@ -250,6 +245,11 @@
       font-size: 12px;
       font-weight: 700;
     }
+    .section-sub{
+      margin: -6px 0 12px;
+      font-size: 12px;
+      color: var(--muted);
+    }
 
     .field{
       display: grid;
@@ -258,8 +258,16 @@
       min-width: 0;
     }
 
+    label.small{
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
     input[type="text"],
-    input[type="date"]{
+    input[type="date"],
+    input[type="number"],
+    textarea{
       width: 100%;
       border: 1px solid var(--line);
       border-radius: var(--radius-md);
@@ -270,12 +278,14 @@
       transition: border .15s ease, box-shadow .15s ease, background .15s ease;
       max-width: 100%;
     }
-
-    input::placeholder{
-      color: #9aa3af;
+    textarea{
+      min-height: 110px;
+      resize: vertical;
     }
 
-    input:focus{
+    input::placeholder, textarea::placeholder{ color: #9aa3af; }
+
+    input:focus, textarea:focus{
       border-color: rgba(31,157,99,0.55);
       box-shadow: 0 0 0 4px rgba(31,157,99,0.12);
       background: #fcfffd;
@@ -288,6 +298,15 @@
     }
     @media (min-width: 720px){
       .grid-2{ grid-template-columns: 1fr 1fr; }
+    }
+
+    .grid-3{
+      display: grid;
+      gap: 16px;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 720px){
+      .grid-3{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
 
     .hint{
@@ -329,6 +348,38 @@
       font-size: 11.5px;
       font-weight: 600;
       display: none;
+    }
+
+    .divider{
+      height: 1px;
+      background: rgba(0,0,0,0.04);
+      margin: 10px 0 2px;
+    }
+
+    .mini-card{
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 12px;
+      padding: 12px;
+      background: #fff;
+    }
+
+    .kpi{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #ffffff, #ffffff 55%, var(--accent-soft));
+      border: 1px solid rgba(31,157,99,0.18);
+    }
+    .kpi strong{
+      font-size: 15px;
+      letter-spacing: 0.01em;
+    }
+    .kpi .val{
+      font-weight: 800;
+      color: var(--accent-2);
     }
 
     footer{
@@ -378,11 +429,7 @@
       place-items: center;
       box-shadow: 0 8px 16px rgba(2, 24, 12, 0.06);
     }
-    .done-badge svg{
-      width: 26px;
-      height: 26px;
-      display: block;
-    }
+    .done-badge svg{ width: 26px; height: 26px; display: block; }
 
     .done-kicker{
       font-size: 11.5px;
@@ -429,22 +476,22 @@
           <div class="brand">
             <img
               class="brand-icon"
-              src="YOUR_SUUMIN_ICON_URL"
-              alt="お部屋探しのスーミン"
+              src="YOUR_ICON_URL"
+              alt="日報フォーム"
               onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';"
             />
             <span class="brand-badge" aria-hidden="true"></span>
 
             <div>
-              <div>契約情報 回答フォーム</div>
-              <span class="brand-license">東京都知事免許（2）第101896号</span>
+              <div>日報 回答フォーム</div>
+              <span class="brand-license">入力内容は社内共有用です（外部公開しません）</span>
             </div>
           </div>
-          <div class="pill-note">約1分で入力</div>
+          <div class="pill-note">約2分で入力</div>
         </div>
 
         <div class="header-thanks" id="headerThanks">
-          <div class="thanks-title">お部屋探しのスーミン</div>
+          <div class="thanks-title">送信完了</div>
         </div>
       </div>
     </header>
@@ -452,11 +499,9 @@
     <main class="container">
       <section class="hero" id="heroSection">
         <div class="hero-head">
-          <span class="meta">契約情報をご入力ください</span>
-          <h1>必要項目だけ<br>サクッと回答</h1>
-          <p>
-            営業担当名・顧客名・物件名・仲介手数料・AD・契約日・契約開始日（起算日）をまとめて送れます。
-          </p>
+          <span class="meta">日報を記入してください</span>
+          <h1>その日の「状況」を<br>一発で共有する</h1>
+          <p>数字と温度感が揃うと、次の一手が早くなります。</p>
         </div>
       </section>
 
@@ -471,92 +516,210 @@
 
             <div class="done-kicker">送信完了</div>
 
-            <h2>ご回答ありがとうございます😌</h2>
+            <h2>日報、受け取りました😌</h2>
 
             <p class="thankyou-body">
-              送信内容を受け取りました。<br>
-              確認のうえ、必要に応じてご連絡いたします。
+              共有ありがとうございます。<br>
+              数字・温度感・課題が揃うと、チームの判断が速くなります。
             </p>
 
             <p class="thankyou-secondary">
-              追記があれば、いつでもお知らせください。
+              追記があれば、同じフォームから再送してOKです。
             </p>
           </section>
 
           <div class="thankyou-footnote">
-            送信内容を確認後、できるだけスムーズに対応いたします。
+            ※このHTMLは「送信」部分を未接続です（必要ならEmailJS/スプレッドシート連携に拡張できます）
           </div>
         </div>
       </div>
 
-      <form id="answerForm" novalidate>
+      <form id="dailyReportForm" novalidate>
+        <!-- 基本情報 -->
         <div class="section">
-          <div class="field">
-            <div class="section-title">営業担当名 <span class="req">必須</span></div>
-            <input id="salesName" name="salesName" type="text" placeholder="例：ネオ" required />
-            <div class="error" data-error-for="salesName">営業担当名を入力してください。</div>
-          </div>
-
+          <div class="section-title">基本情報</div>
           <div class="grid-2">
             <div class="field">
-              <div class="section-title">顧客名 <span class="req">必須</span></div>
-              <input id="customerName" name="customerName" type="text" placeholder="例：山田 太郎" required />
-              <div class="error" data-error-for="customerName">顧客名を入力してください。</div>
+              <div class="section-title">日付 <span class="req">必須</span></div>
+              <input id="date" name="date" type="date" required />
+              <div class="error" data-error-for="date">日付を入力してください。</div>
             </div>
 
             <div class="field">
-              <div class="section-title">物件名 <span class="req">必須</span></div>
-              <input id="propertyName" name="propertyName" type="text" placeholder="例：RELUXIA隅田八広 403" required />
-              <div class="error" data-error-for="propertyName">物件名を入力してください。</div>
-            </div>
-          </div>
-
-          <div class="grid-2">
-            <div class="field">
-              <div class="section-title">仲介手数料 <span class="req">必須</span></div>
-              <input
-                id="brokerFee"
-                name="brokerFee"
-                type="text"
-                inputmode="decimal"
-                placeholder="例：賃料1ヶ月 / 55,000円 / 0円 など"
-                required
-              />
-              <div class="hint">金額 or 「賃料◯ヶ月」など、自由入力でOKです。</div>
-              <div class="error" data-error-for="brokerFee">仲介手数料を入力してください。</div>
-            </div>
-
-            <div class="field">
-              <div class="section-title">AD <span class="req">必須</span></div>
-              <input
-                id="adFee"
-                name="adFee"
-                type="text"
-                inputmode="decimal"
-                placeholder="例：1ヶ月 / 0.5ヶ月 / なし など"
-                required
-              />
-              <div class="hint">ADが無い場合は「なし」でもOKです。</div>
-              <div class="error" data-error-for="adFee">ADを入力してください。</div>
+              <div class="section-title">氏名 <span class="req">必須</span></div>
+              <input id="name" name="name" type="text" placeholder="例：榊 ねお" required />
+              <div class="error" data-error-for="name">氏名を入力してください。</div>
             </div>
           </div>
         </div>
 
-        <div class="section contact-section">
-          <div class="section-title">日付情報</div>
+        <!-- 本日の業務概要 -->
+        <div class="section">
+          <div class="section-title">本日の業務概要</div>
+          <div class="section-sub">箇条書きでOK（例：・内見3件 ・見積もり作成 ・追客 など）</div>
+          <div class="field">
+            <textarea
+              id="summary"
+              name="summary"
+              placeholder="・&#10;・&#10;・"
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- 契約関係の進捗報告 -->
+        <div class="section">
+          <div class="section-title">契約関係の進捗報告</div>
+          <div class="section-sub">（案件名＋フェーズ）をそのまま貼れる形にしています</div>
+
+          <div class="field">
+            <textarea
+              id="contractProgress"
+              name="contractProgress"
+              placeholder="・〇〇様：&#10;・△△様：&#10;・□□様："
+            ></textarea>
+          </div>
 
           <div class="grid-2">
             <div class="field">
-              <div class="section-title">契約日 <span class="req">必須</span></div>
-              <input id="contractDate" name="contractDate" type="date" required />
-              <div class="error" data-error-for="contractDate">契約日を選択してください。</div>
+              <div class="section-title">進行中合計（件） <span class="hint">任意</span></div>
+              <input id="contractTotal" name="contractTotal" type="number" inputmode="numeric" min="0" placeholder="例：5" />
             </div>
 
             <div class="field">
-              <div class="section-title">契約開始日（起算日） <span class="req">必須</span></div>
-              <input id="startDate" name="startDate" type="date" required />
-              <div class="error" data-error-for="startDate">契約開始日（起算日）を選択してください。</div>
+              <div class="section-title">補足メモ <span class="hint">任意</span></div>
+              <input id="contractNote" name="contractNote" type="text" placeholder="例：要審査書類待ち / 管理会社回答待ち など" />
             </div>
+          </div>
+        </div>
+
+        <!-- 温度感 -->
+        <div class="section">
+          <div class="section-title">対応中顧客の状況（温度感）</div>
+          <div class="section-sub">「名前＋状況」を短く。多いならコピペで追加してOK。</div>
+
+          <div class="grid-3">
+            <div class="field">
+              <div class="section-title">【高】</div>
+              <textarea id="tempHigh" name="tempHigh" placeholder="・&#10;・"></textarea>
+            </div>
+            <div class="field">
+              <div class="section-title">【中】</div>
+              <textarea id="tempMid" name="tempMid" placeholder="・&#10;・"></textarea>
+            </div>
+            <div class="field">
+              <div class="section-title">【低】</div>
+              <textarea id="tempLow" name="tempLow" placeholder="・&#10;・"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- 成約状況 -->
+        <div class="section">
+          <div class="section-title">成約状況</div>
+          <div class="section-sub">数字を入れると成約率を自動計算します</div>
+
+          <div class="grid-2">
+            <div class="field">
+              <div class="section-title">本日成約（件） <span class="hint">任意</span></div>
+              <input id="dealToday" name="dealToday" type="number" inputmode="numeric" min="0" placeholder="例：1" />
+            </div>
+            <div class="field">
+              <div class="section-title">今月成約累計（件） <span class="hint">任意</span></div>
+              <input id="dealMonth" name="dealMonth" type="number" inputmode="numeric" min="0" placeholder="例：12" />
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="field">
+              <div class="section-title">今まで対応した顧客数（累計・名） <span class="hint">任意</span></div>
+              <input id="custTotal" name="custTotal" type="number" inputmode="numeric" min="0" placeholder="例：240" />
+            </div>
+            <div class="field">
+              <div class="section-title">今月対応顧客数（名） <span class="hint">任意</span></div>
+              <input id="custMonth" name="custMonth" type="number" inputmode="numeric" min="0" placeholder="例：80" />
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="kpi" aria-live="polite">
+              <strong>成約率（今月）</strong>
+              <div class="val" id="conversionRate">— %</div>
+            </div>
+            <div class="hint">→ 今月成約累計 ÷ 今月対応顧客数</div>
+          </div>
+        </div>
+
+        <!-- LINE対応状況 -->
+        <div class="section">
+          <div class="section-title">LINE対応状況</div>
+          <div class="grid-3">
+            <div class="field">
+              <div class="section-title">現在対応中（名） <span class="hint">任意</span></div>
+              <input id="lineNow" name="lineNow" type="number" inputmode="numeric" min="0" placeholder="例：18" />
+            </div>
+            <div class="field">
+              <div class="section-title">本日新規反響（名） <span class="hint">任意</span></div>
+              <input id="lineNew" name="lineNew" type="number" inputmode="numeric" min="0" placeholder="例：6" />
+            </div>
+            <div class="field">
+              <div class="section-title">追客中（名） <span class="hint">任意</span></div>
+              <input id="lineFollow" name="lineFollow" type="number" inputmode="numeric" min="0" placeholder="例：10" />
+            </div>
+          </div>
+        </div>
+
+        <!-- 現状の課題 -->
+        <div class="section">
+          <div class="section-title">現状の課題</div>
+          <div class="section-sub">詰まってる点・遅れてる理由・再発しそうなリスクを書いておくと強い</div>
+          <div class="field">
+            <textarea
+              id="issues"
+              name="issues"
+              placeholder="・&#10;・&#10;・"
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- 改善案・明日の取り組み -->
+        <div class="section">
+          <div class="section-title">改善案・明日の取り組み</div>
+          <div class="section-sub">明日「何を変えるか」を具体化</div>
+          <div class="field">
+            <textarea
+              id="improvements"
+              name="improvements"
+              placeholder="・&#10;・&#10;・"
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- 明日の予定 -->
+        <div class="section">
+          <div class="section-title">明日の予定</div>
+          <div class="section-sub">予定の粒度は自由（場所・時間・顧客名など）</div>
+
+          <div class="grid-2">
+            <div class="field">
+              <div class="section-title">内見 <span class="hint">任意</span></div>
+              <textarea id="planViewing" name="planViewing" placeholder="例：13:00 新宿（〇〇様）&#10;例：16:30 中野（△△様）"></textarea>
+            </div>
+            <div class="field">
+              <div class="section-title">撮影 <span class="hint">任意</span></div>
+              <textarea id="planShooting" name="planShooting" placeholder="例：午前 〇〇沿線 3物件&#10;例：夕方 ルームツアー2本"></textarea>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="section-title">契約対応 <span class="hint">任意</span></div>
+            <textarea id="planContract" name="planContract" placeholder="例：重要事項説明 / 申込書回収 / 審査フォロー など"></textarea>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="field">
+            <div class="section-title">その他メモ <span class="hint">任意</span></div>
+            <textarea id="memo" name="memo" placeholder="気づき / 共有したいこと / 明日ひとこと など"></textarea>
           </div>
         </div>
 
@@ -571,18 +734,9 @@
     <footer></footer>
   </div>
 
-  <!-- EmailJS -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-
   <script>
     (function(){
-      const EMAILJS_SERVICE_ID  = "service_sgac4or";
-      const EMAILJS_TEMPLATE_ID = "template_8rakpen";
-      const EMAILJS_PUBLIC_KEY  = "QedlQxUXH2yDJJvjU";
-
-      emailjs.init(EMAILJS_PUBLIC_KEY);
-
-      const form = document.getElementById("answerForm");
+      const form = document.getElementById("dailyReportForm");
       const msg = document.getElementById("formMsg");
       const hero = document.getElementById("heroSection");
 
@@ -598,11 +752,24 @@
         el.style.display = on ? "block" : "none";
       };
 
-      const pad2 = (n) => String(n).padStart(2, "0");
+      const validators = {
+        date: () => !!form.date.value,
+        name: () => form.name.value.trim().length > 0
+      };
 
-      const formatDateTime = (iso) => {
-        const d = iso ? new Date(iso) : new Date();
-        if (Number.isNaN(d.getTime())) return "";
+      const validateAll = () => {
+        let ok = true;
+        ["date","name"].forEach(k => showError(k, false));
+        ["date","name"].forEach(k => {
+          const pass = validators[k]();
+          if (!pass) { showError(k, true); ok = false; }
+        });
+        return ok;
+      };
+
+      const pad2 = (n) => String(n).padStart(2, "0");
+      const formatDateTime = () => {
+        const d = new Date();
         const y = d.getFullYear();
         const m = pad2(d.getMonth() + 1);
         const day = pad2(d.getDate());
@@ -612,53 +779,65 @@
         return `${y}-${m}-${day} ${h}:${min}:${s}`;
       };
 
-      const formatDate = (v) => (v || "").trim();
-
-      const clean = (s) => String(s ?? "").replace(/[\r\n]+/g, " ").trim();
-
-      const validators = {
-        salesName: () => form.salesName.value.trim().length > 0,
-        customerName: () => form.customerName.value.trim().length > 0,
-        propertyName: () => form.propertyName.value.trim().length > 0,
-        brokerFee: () => form.brokerFee.value.trim().length > 0,
-        adFee: () => form.adFee.value.trim().length > 0,
-        contractDate: () => !!form.contractDate.value,
-        startDate: () => !!form.startDate.value
+      const toNum = (v) => {
+        const n = Number(String(v ?? "").trim());
+        return Number.isFinite(n) ? n : 0;
       };
 
-      const validateAll = () => {
-        let ok = true;
-        const keys = ["salesName","customerName","propertyName","brokerFee","adFee","contractDate","startDate"];
-        keys.forEach(k => showError(k, false));
+      const updateConversion = () => {
+        const dealMonth = toNum(form.dealMonth.value);
+        const custMonth = toNum(form.custMonth.value);
+        const el = document.getElementById("conversionRate");
+        if (!el) return;
 
-        keys.forEach(k => {
-          const pass = validators[k]();
-          if (!pass) {
-            showError(k, true);
-            ok = false;
-          }
-        });
-        return ok;
+        if (custMonth <= 0) {
+          el.textContent = "— %";
+          return;
+        }
+        const rate = (dealMonth / custMonth) * 100;
+        const rounded = Math.round(rate * 10) / 10;
+        el.textContent = `${rounded.toFixed(1)} %`;
       };
 
-      const buildEmailParams = () => {
+      form.dealMonth.addEventListener("input", updateConversion);
+      form.custMonth.addEventListener("input", updateConversion);
+      updateConversion();
+
+      const buildPayload = () => {
         return {
-          submittedAt: formatDateTime(new Date().toISOString()),
+          submittedAt: formatDateTime(),
+          date: form.date.value,
+          name: form.name.value.trim(),
 
-          salesName: clean(form.salesName.value),
-          customerName: clean(form.customerName.value),
-          propertyName: clean(form.propertyName.value),
+          summary: form.summary.value,
 
-          brokerFee: clean(form.brokerFee.value),
-          adFee: clean(form.adFee.value),
+          contractProgress: form.contractProgress.value,
+          contractTotal: form.contractTotal.value,
+          contractNote: form.contractNote.value.trim(),
 
-          contractDate: formatDate(form.contractDate.value),
-          startDate: formatDate(form.startDate.value)
+          tempHigh: form.tempHigh.value,
+          tempMid: form.tempMid.value,
+          tempLow: form.tempLow.value,
+
+          dealToday: form.dealToday.value,
+          dealMonth: form.dealMonth.value,
+          custTotal: form.custTotal.value,
+          custMonth: form.custMonth.value,
+          conversionRate: document.getElementById("conversionRate")?.textContent ?? "",
+
+          lineNow: form.lineNow.value,
+          lineNew: form.lineNew.value,
+          lineFollow: form.lineFollow.value,
+
+          issues: form.issues.value,
+          improvements: form.improvements.value,
+
+          planViewing: form.planViewing.value,
+          planShooting: form.planShooting.value,
+          planContract: form.planContract.value,
+
+          memo: form.memo.value
         };
-      };
-
-      const sendViaEmailJS = async (params) => {
-        return emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
       };
 
       const showThankYouView = () => {
@@ -686,27 +865,8 @@
       };
 
       const wireLiveClear = () => {
-        form.salesName.addEventListener("input", () => {
-          if (validators.salesName()) showError("salesName", false);
-        });
-        form.customerName.addEventListener("input", () => {
-          if (validators.customerName()) showError("customerName", false);
-        });
-        form.propertyName.addEventListener("input", () => {
-          if (validators.propertyName()) showError("propertyName", false);
-        });
-        form.brokerFee.addEventListener("input", () => {
-          if (validators.brokerFee()) showError("brokerFee", false);
-        });
-        form.adFee.addEventListener("input", () => {
-          if (validators.adFee()) showError("adFee", false);
-        });
-        form.contractDate.addEventListener("change", () => {
-          if (validators.contractDate()) showError("contractDate", false);
-        });
-        form.startDate.addEventListener("change", () => {
-          if (validators.startDate()) showError("startDate", false);
-        });
+        form.date.addEventListener("change", () => { if (validators.date()) showError("date", false); });
+        form.name.addEventListener("input",  () => { if (validators.name()) showError("name", false); });
       };
       wireLiveClear();
 
@@ -723,19 +883,22 @@
           submitBtn.style.filter = "grayscale(0.15)";
         }
 
-        msg.textContent = "送信中です…";
+        msg.textContent = "送信準備中…";
 
         try{
-          const params = buildEmailParams();
-          await sendViaEmailJS(params);
+          const payload = buildPayload();
+          console.log("DailyReport payload:", payload);
 
-          msg.textContent = "送信が完了しました。";
+          // ここは未接続：必要なら EmailJS / GAS / スプレッドシートへ送信処理を差し込み
+          // 例：fetch("YOUR_ENDPOINT", { method:"POST", headers:{...}, body: JSON.stringify(payload) })
+
+          msg.textContent = "完了しました。";
           showThankYouView();
 
         }catch(err){
-          console.error("EmailJS送信失敗", err);
-          msg.textContent = "送信に失敗しました。通信環境をご確認のうえ、再度お試しください。";
-          alert("送信に失敗しました。通信環境をご確認のうえ、再度お試しください。");
+          console.error(err);
+          msg.textContent = "処理に失敗しました。もう一度お試しください。";
+          alert("処理に失敗しました。もう一度お試しください。");
         }finally{
           if (submitBtn) {
             submitBtn.disabled = false;
@@ -745,10 +908,21 @@
       });
 
       form.addEventListener("reset", () => {
-        ["salesName","customerName","propertyName","brokerFee","adFee","contractDate","startDate"]
-          .forEach(k => showError(k, false));
+        ["date","name"].forEach(k => showError(k, false));
         msg.textContent = "";
+        setTimeout(updateConversion, 0);
       });
+
+      // 初回：日付を今日にセット（ユーザーが触ってなければ）
+      try{
+        if (!form.date.value) {
+          const d = new Date();
+          const yyyy = d.getFullYear();
+          const mm = String(d.getMonth()+1).padStart(2,"0");
+          const dd = String(d.getDate()).padStart(2,"0");
+          form.date.value = `${yyyy}-${mm}-${dd}`;
+        }
+      }catch(e){}
     })();
   </script>
 </body>
