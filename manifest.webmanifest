@@ -1,0 +1,38 @@
+{
+  "name": "日報 回答フォーム",
+  "short_name": "日報フォーム",
+  "description": "日報（業務概要・進捗・温度感・数字・課題・明日の予定）をサクッと共有できるフォーム",
+  "start_url": "/daily-report-form/",
+  "scope": "/daily-report-form/",
+  "display": "standalone",
+  "background_color": "#f7faf8",
+  "theme_color": "#1f9d63",
+  "lang": "ja",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/daily-report-form/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/daily-report-form/icons/icon-192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/daily-report-form/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/daily-report-form/icons/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
