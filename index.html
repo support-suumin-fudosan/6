@@ -294,24 +294,11 @@
     }
 
     /* 日付の枠：横長な丸枠（四角枠じゃなく） */
-    .basic-row{
-      display: grid;
-      gap: 14px;
-      grid-template-columns: 1fr;
-      align-items: end;
-    }
-    @media (min-width: 720px){
-      .basic-row{
-        grid-template-columns: 260px 1fr;
-        align-items: end;
-      }
-    }
     .date-input{
       padding: 10px 14px;
       font-size: 14.5px;
       border-radius: 999px; /* ←丸枠 */
     }
-    .date-field{ margin-bottom: 10px; }
 
     .hint{
       font-size: 11.5px;
@@ -379,8 +366,10 @@
       color: var(--accent-2);
     }
 
-    /* 同じ枠内に2項目：センスよく */
-    .pair-card{
+    /* =========================
+       共通：仲間で括るカード（LINE状況のデザインを踏襲）
+       ========================= */
+    .group-card{
       border-radius: 14px;
       border: 1px solid rgba(31,157,99,0.18);
       background: linear-gradient(135deg, #ffffff, #ffffff 55%, var(--accent-soft));
@@ -389,32 +378,12 @@
       gap: 12px;
       box-shadow: 0 8px 16px rgba(2,24,12,0.05);
     }
-    @media (min-width: 720px){
-      .pair-card{
-        grid-template-columns: 1fr 1fr;
-        gap: 14px;
-      }
-    }
-    .pair-item{
+    .card-item{
       min-width: 0;
       display: grid;
       gap: 6px;
-      position: relative;
     }
-    @media (min-width: 720px){
-      .pair-item:first-child::after{
-        content:"";
-        position:absolute;
-        right:-7px;
-        top: 6px;
-        bottom: 6px;
-        width: 1px;
-        background: rgba(0,0,0,0.06);
-      }
-    }
-
-    /* KPIラベル文字は section-title と同じサイズ */
-    .pair-label{
+    .card-label{
       display: flex;
       align-items: baseline;
       justify-content: space-between;
@@ -424,10 +393,119 @@
       letter-spacing: 0.01em;
       font-size: 15px;
     }
-    .pair-item input[type="number"]{
-      padding: 11px 12px;
+    .group-card input[type="number"],
+    .group-card input[type="text"],
+    .group-card input[type="date"],
+    .group-card textarea{
       border-radius: 12px;
       font-weight: 700;
+    }
+    .group-card textarea{
+      font-weight: 600;
+    }
+
+    /* 2列/3列の仲間括り（縦仕切りはPCのみ） */
+    @media (min-width: 720px){
+      .group-card.cols-2{
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      .group-card.cols-3{
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+      .group-card.cols-2 .card-item:not(:first-child),
+      .group-card.cols-3 .card-item:not(:first-child){
+        border-left: 1px solid rgba(0,0,0,0.06);
+        padding-left: 14px;
+      }
+    }
+
+    /* 基本情報：日付を最小、3項目をひとまとめ */
+    .basic-card{
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 720px){
+      .basic-card{
+        grid-template-columns: 160px 1fr;
+        grid-template-areas:
+          "date name"
+          "summary summary";
+        gap: 14px;
+      }
+    }
+    .basic-date{ grid-area: date; }
+    .basic-name{ grid-area: name; }
+    .basic-summary{ grid-area: summary; }
+    .basic-card .basic-date input[type="date"]{
+      padding: 9px 12px;
+      font-size: 13.5px;
+      border-radius: 999px;
+    }
+    /* summaryを少し広めに */
+    .basic-card .basic-summary textarea{
+      min-height: 130px;
+      font-weight: 600;
+    }
+
+    /* 契約：進捗（textarea）＋進行中合計（number）を同じ仲間 */
+    .contract-card{
+      gap: 12px;
+    }
+    @media (min-width: 720px){
+      .contract-card{
+        grid-template-columns: 1fr 230px;
+        gap: 14px;
+        align-items: start;
+      }
+      .contract-card .card-item:not(:first-child){
+        border-left: 1px solid rgba(0,0,0,0.06);
+        padding-left: 14px;
+      }
+    }
+    .contract-card textarea{
+      min-height: 150px;
+    }
+
+    /* 温度感：3つ同サイズで“センスよく” */
+    .temp-card textarea{
+      min-height: 150px;
+    }
+    .temp-chip{
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      width: fit-content;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #ffffff;
+      border: 1px solid rgba(31,157,99,0.18);
+      color: var(--accent-2);
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      box-shadow: 0 6px 14px rgba(2, 24, 12, 0.05);
+    }
+    .temp-chip[data-level="mid"]{ color: #0f7a4a; }
+    .temp-chip[data-level="low"]{ color: #0f7a4a; opacity: 0.9; }
+
+    /* 成約状況：累計/今月それぞれ「3つで一括り」 */
+    .conv-card{
+      gap: 12px;
+    }
+    @media (min-width: 720px){
+      .conv-card{
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 14px;
+      }
+      .conv-card .card-item:not(:first-child){
+        border-left: 1px solid rgba(0,0,0,0.06);
+        padding-left: 14px;
+      }
+    }
+    .conv-card .kpi{
+      height: 100%;
+      min-height: 52px;
     }
 
     .tight-gap{ gap: 10px !important; }
@@ -586,59 +664,61 @@
       </div>
 
       <form id="dailyReportForm" novalidate>
-        <!-- 基本情報 -->
+        <!-- 基本情報（3項目をひとまとめ） -->
         <div class="section">
           <div class="section-title big">基本情報</div>
 
-          <div class="basic-row">
-            <div class="field date-field">
-              <div class="section-title">日付 <span class="req">必須</span></div>
-              <input id="date" name="date" type="date" class="date-input" required />
-              <div class="error" data-error-for="date">日付を入力してください。</div>
-            </div>
-
-            <div class="field">
-              <div class="section-title">氏名 <span class="req">必須</span></div>
-              <input id="name" name="name" type="text" required />
-              <div class="error" data-error-for="name">氏名を入力してください。</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 本日の業務内容 -->
-        <div class="section">
-          <div class="section-title">本日の業務内容 <span class="req">必須</span></div>
           <div class="field">
-            <textarea
-              id="summary"
-              name="summary"
-              placeholder="内見（撮影）、内見（営業）、動画編集、見積もり作成、追客、架電など"
-              required
-            ></textarea>
-            <div class="error" data-error-for="summary">本日の業務内容を入力してください。</div>
+            <div class="group-card basic-card" role="group" aria-label="基本情報">
+              <div class="card-item basic-date">
+                <div class="card-label">日付 <span class="req">必須</span></div>
+                <input id="date" name="date" type="date" class="date-input" required />
+                <div class="error" data-error-for="date">日付を入力してください。</div>
+              </div>
+
+              <div class="card-item basic-name">
+                <div class="card-label">氏名 <span class="req">必須</span></div>
+                <input id="name" name="name" type="text" required />
+                <div class="error" data-error-for="name">氏名を入力してください。</div>
+              </div>
+
+              <div class="card-item basic-summary">
+                <div class="card-label">本日の業務内容 <span class="req">必須</span></div>
+                <textarea
+                  id="summary"
+                  name="summary"
+                  placeholder="内見（撮影）、内見（営業）、動画編集、見積もり作成、追客、架電など"
+                  required
+                ></textarea>
+                <div class="error" data-error-for="summary">本日の業務内容を入力してください。</div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- 契約関係の進捗 -->
+        <!-- 契約（2項目を同じ仲間としてレイアウト） -->
         <div class="section">
-          <div class="section-title">契約関係の進捗 <span class="req">必須</span></div>
+          <div class="section-title big">契約関係</div>
           <div class="section-sub">（案件名＋フェーズ）</div>
 
           <div class="field">
-            <textarea
-              id="contractProgress"
-              name="contractProgress"
-              placeholder="〇〇様：&#10;△△様：&#10;××様："
-              required
-            ></textarea>
-            <div class="error" data-error-for="contractProgress">契約関係の進捗を入力してください。</div>
-          </div>
+            <div class="group-card contract-card" role="group" aria-label="契約関係の進捗と進行中合計">
+              <div class="card-item">
+                <div class="card-label">契約関係の進捗 <span class="req">必須</span></div>
+                <textarea
+                  id="contractProgress"
+                  name="contractProgress"
+                  placeholder="〇〇様：&#10;△△様：&#10;××様："
+                  required
+                ></textarea>
+                <div class="error" data-error-for="contractProgress">契約関係の進捗を入力してください。</div>
+              </div>
 
-          <div class="grid-2">
-            <div class="field">
-              <div class="section-title">進行中合計 <span class="req">必須</span></div>
-              <input id="contractTotal" name="contractTotal" type="number" inputmode="numeric" min="0" required />
-              <div class="error" data-error-for="contractTotal">進行中合計を入力してください。</div>
+              <div class="card-item">
+                <div class="card-label">進行中合計 <span class="req">必須</span></div>
+                <input id="contractTotal" name="contractTotal" type="number" inputmode="numeric" min="0" required />
+                <div class="error" data-error-for="contractTotal">進行中合計を入力してください。</div>
+              </div>
             </div>
           </div>
         </div>
@@ -649,9 +729,9 @@
 
           <!-- 同じ枠内：現在対応数 / 新規担当数（本日＋） -->
           <div class="field">
-            <div class="pair-card" role="group" aria-label="LINE対応状況 KPI">
-              <div class="pair-item">
-                <div class="pair-label">
+            <div class="group-card cols-2" role="group" aria-label="LINE対応状況 KPI">
+              <div class="card-item">
+                <div class="card-label">
                   <span>現在対応数</span>
                 </div>
                 <div class="note">※既読無視から48時間経過した顧客を除く</div>
@@ -659,8 +739,8 @@
                 <div class="error" data-error-for="lineNow">現在対応数を入力してください。</div>
               </div>
 
-              <div class="pair-item">
-                <div class="pair-label">
+              <div class="card-item">
+                <div class="card-label">
                   <span>新規担当数（本日＋）</span>
                 </div>
                 <input id="lineNew" name="lineNew" type="number" inputmode="numeric" min="0" required />
@@ -671,17 +751,17 @@
 
           <!-- 同じ枠内：追客数 / 追客反応数 -->
           <div class="field">
-            <div class="pair-card" role="group" aria-label="追客 KPI">
-              <div class="pair-item">
-                <div class="pair-label">
+            <div class="group-card cols-2" role="group" aria-label="追客 KPI">
+              <div class="card-item">
+                <div class="card-label">
                   <span>追客数</span>
                 </div>
                 <input id="lineFollow" name="lineFollow" type="number" inputmode="numeric" min="0" required />
                 <div class="error" data-error-for="lineFollow">追客数を入力してください。</div>
               </div>
 
-              <div class="pair-item">
-                <div class="pair-label">
+              <div class="card-item">
+                <div class="card-label">
                   <span>追客反応数</span>
                 </div>
                 <div class="note">※追客から48時間以内に反応した顧客</div>
@@ -693,73 +773,91 @@
 
           <div class="divider"></div>
 
+          <!-- 温度感（3枠：同サイズ＆センス良く） -->
           <div class="section-title big" style="margin-top:10px;">温度感</div>
           <div class="section-sub">（顧客名＋状況）</div>
 
-          <div class="grid-3">
-            <div class="field">
-              <div class="section-title">【高】 <span class="opt">任意</span></div>
-              <textarea id="tempHigh" name="tempHigh"></textarea>
-            </div>
-            <div class="field">
-              <div class="section-title">【中】 <span class="opt">任意</span></div>
-              <textarea id="tempMid" name="tempMid"></textarea>
-            </div>
-            <div class="field">
-              <div class="section-title">【低】 <span class="opt">任意</span></div>
-              <textarea id="tempLow" name="tempLow"></textarea>
+          <div class="field">
+            <div class="group-card cols-3 temp-card" role="group" aria-label="温度感 高中低">
+              <div class="card-item">
+                <div class="card-label">
+                  <span class="temp-chip" data-level="high">高</span>
+                  <span class="opt">任意</span>
+                </div>
+                <textarea id="tempHigh" name="tempHigh" placeholder="例：〇〇様：内見日程調整中"></textarea>
+              </div>
+
+              <div class="card-item">
+                <div class="card-label">
+                  <span class="temp-chip" data-level="mid">中</span>
+                  <span class="opt">任意</span>
+                </div>
+                <textarea id="tempMid" name="tempMid" placeholder="例：△△様：条件すり合わせ中"></textarea>
+              </div>
+
+              <div class="card-item">
+                <div class="card-label">
+                  <span class="temp-chip" data-level="low">低</span>
+                  <span class="opt">任意</span>
+                </div>
+                <textarea id="tempLow" name="tempLow" placeholder="例：××様：返信待ち"></textarea>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- 成約状況 -->
+        <!-- 成約状況（累計3つ / 今月3つ をそれぞれ一括り） -->
         <div class="section">
           <div class="section-title big">成約状況</div>
           <div class="section-sub">※身内の紹介を除く</div>
 
-          <div class="grid-2 tight-gap">
-            <div class="field">
-              <div class="section-title">成約数（累計） <span class="req">必須</span></div>
-              <input id="dealTotal" name="dealTotal" type="number" inputmode="numeric" min="0" required />
-              <div class="error" data-error-for="dealTotal">成約数（累計）を入力してください。</div>
-            </div>
-
-            <div class="field">
-              <div class="section-title">対応顧客数（累計） <span class="req">必須</span></div>
-              <div class="note">※1度でも返信があったすべての顧客</div>
-              <input id="custTotal" name="custTotal" type="number" inputmode="numeric" min="0" required />
-              <div class="error" data-error-for="custTotal">対応顧客数（累計）を入力してください。</div>
-            </div>
-          </div>
-
           <div class="field">
-            <div class="kpi" aria-live="polite">
-              <strong>成約率（累計）</strong>
-              <div class="val" id="conversionRateTotal">— %</div>
+            <div class="group-card conv-card" role="group" aria-label="成約状況（累計）">
+              <div class="card-item">
+                <div class="card-label">成約数（累計） <span class="req">必須</span></div>
+                <input id="dealTotal" name="dealTotal" type="number" inputmode="numeric" min="0" required />
+                <div class="error" data-error-for="dealTotal">成約数（累計）を入力してください。</div>
+              </div>
+
+              <div class="card-item">
+                <div class="card-label">対応顧客数（累計） <span class="req">必須</span></div>
+                <div class="note">※1度でも返信があったすべての顧客</div>
+                <input id="custTotal" name="custTotal" type="number" inputmode="numeric" min="0" required />
+                <div class="error" data-error-for="custTotal">対応顧客数（累計）を入力してください。</div>
+              </div>
+
+              <div class="card-item" style="align-content:start;">
+                <div class="card-label">成約率（累計）</div>
+                <div class="kpi" aria-live="polite">
+                  <strong>成約率</strong>
+                  <div class="val" id="conversionRateTotal">— %</div>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="spacer-xl"></div>
+          <div class="field" style="margin-top: 6px;">
+            <div class="group-card conv-card" role="group" aria-label="成約状況（今月）">
+              <div class="card-item">
+                <div class="card-label">成約数（今月） <span class="req">必須</span></div>
+                <input id="dealMonth" name="dealMonth" type="number" inputmode="numeric" min="0" required />
+                <div class="error" data-error-for="dealMonth">成約数（今月）を入力してください。</div>
+              </div>
 
-          <div class="grid-2 tight-gap">
-            <div class="field">
-              <div class="section-title">成約数（今月） <span class="req">必須</span></div>
-              <input id="dealMonth" name="dealMonth" type="number" inputmode="numeric" min="0" required />
-              <div class="error" data-error-for="dealMonth">成約数（今月）を入力してください。</div>
-            </div>
+              <div class="card-item">
+                <div class="card-label">対応顧客数（今月） <span class="req">必須</span></div>
+                <div class="note">※1度でも返信があったすべての顧客</div>
+                <input id="custMonth" name="custMonth" type="number" inputmode="numeric" min="0" required />
+                <div class="error" data-error-for="custMonth">対応顧客数（今月）を入力してください。</div>
+              </div>
 
-            <div class="field">
-              <div class="section-title">対応顧客数（今月） <span class="req">必須</span></div>
-              <div class="note">※1度でも返信があったすべての顧客</div>
-              <input id="custMonth" name="custMonth" type="number" inputmode="numeric" min="0" required />
-              <div class="error" data-error-for="custMonth">対応顧客数（今月）を入力してください。</div>
-            </div>
-          </div>
-
-          <div class="field">
-            <div class="kpi" aria-live="polite">
-              <strong>成約率（今月）</strong>
-              <div class="val" id="conversionRateMonth">— %</div>
+              <div class="card-item" style="align-content:start;">
+                <div class="card-label">成約率（今月）</div>
+                <div class="kpi" aria-live="polite">
+                  <strong>成約率</strong>
+                  <div class="val" id="conversionRateMonth">— %</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
