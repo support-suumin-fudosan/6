@@ -811,7 +811,6 @@
               </div>
 
               <div class="card-item" style="align-content:start;">
-                <!-- ここにあった「成約率（累計）」は削除 -->
                 <div class="kpi" aria-live="polite">
                   <strong>成約率（累計）</strong>
                   <div class="val" id="conversionRateTotal">— %</div>
@@ -836,7 +835,6 @@
               </div>
 
               <div class="card-item" style="align-content:start;">
-                <!-- ここにあった「成約率（今月）」は削除 -->
                 <div class="kpi" aria-live="polite">
                   <strong>成約率（今月）</strong>
                   <div class="val" id="conversionRateMonth">— %</div>
@@ -846,37 +844,35 @@
           </div>
         </div>
 
-        <!-- 現状の課題 -->
+        <!-- 現状の課題（任意） -->
         <div class="section">
-          <div class="section-title">現状の課題</div>
+          <div class="section-title">現状の課題 <span class="opt">任意</span></div>
           <div class="field">
             <textarea
               id="issues"
               name="issues"
               placeholder="具体的に記述してください。"
-              required
             ></textarea>
-            <div class="error" data-error-for="issues">現状の課題を入力してください。</div>
+            <!-- 任意化のためエラー表示は不要（残してもOKだが使わない） -->
           </div>
         </div>
 
-        <!-- 改善案 -->
+        <!-- 改善案（任意） -->
         <div class="section">
-          <div class="section-title">改善案</div>
+          <div class="section-title">改善案 <span class="opt">任意</span></div>
           <div class="field">
             <textarea
               id="improvements"
               name="improvements"
               placeholder="具体的に記述してください。"
-              required
             ></textarea>
-            <div class="error" data-error-for="improvements">改善案を入力してください。</div>
+            <!-- 任意化のためエラー表示は不要（残してもOKだが使わない） -->
           </div>
         </div>
 
         <!-- 明日の予定 -->
         <div class="section">
-          <div class="section-title">明日の予定</div>
+          <div class="section-title">明日の予定 <span class="req">必須</span></div>
           <div class="field">
             <textarea id="tomorrowPlan" name="tomorrowPlan" required></textarea>
             <div class="error" data-error-for="tomorrowPlan">明日の予定を入力してください。</div>
@@ -985,8 +981,7 @@
           return !Number.isNaN(n) && n >= 0;
         },
 
-        issues: () => nonEmpty(form.issues.value),
-        improvements: () => nonEmpty(form.improvements.value),
+        // issues / improvements は任意化したのでバリデーション対象外
         tomorrowPlan: () => nonEmpty(form.tomorrowPlan.value)
       };
 
@@ -996,7 +991,6 @@
         "contractProgress","contractTotal",
         "lineNow","lineNew","lineFollow","lineFollowReact",
         "dealTotal","custTotal","dealMonth","custMonth",
-        "issues","improvements",
         "tomorrowPlan"
       ];
 
@@ -1075,6 +1069,7 @@
           custMonth: form.custMonth.value,
           conversionRateMonth: document.getElementById("conversionRateMonth")?.textContent ?? "",
 
+          // 任意だけど送る（空なら空のまま）
           issues: form.issues.value,
           improvements: form.improvements.value,
 
