@@ -355,7 +355,6 @@
       border: 1px solid rgba(31,157,99,0.22);
       box-shadow: 0 10px 18px rgba(2,24,12,0.06);
     }
-    /* ←太すぎ修正（他と同等） */
     .kpi-major strong{
       font-size: 15px;
       letter-spacing: 0.06em;
@@ -506,6 +505,56 @@
     }
     .temp-chip[data-level="mid"]{ color: #0f7a4a; }
     .temp-chip[data-level="low"]{ color: #0f7a4a; opacity: 0.9; }
+
+    /* 今月：1枠で「今月」ヘッダ＋中身3列 */
+    .month-wrap{
+      padding: 14px;
+      gap: 12px;
+    }
+    .month-head{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed rgba(0,0,0,0.08);
+    }
+    .month-pill{
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #ffffff;
+      border: 1px solid rgba(31,157,99,0.18);
+      color: var(--accent-2);
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      box-shadow: 0 6px 14px rgba(2, 24, 12, 0.05);
+      width: fit-content;
+    }
+    .month-sub{
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .month-grid{
+      display: grid;
+      gap: 12px;
+      min-width: 0;
+    }
+    @media (min-width: 720px){
+      .month-grid{
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+      .month-grid .card-item:not(:first-child){
+        border-left: 1px solid rgba(0,0,0,0.06);
+        padding-left: 14px;
+      }
+    }
 
     footer{
       padding: 10px 18px 26px;
@@ -719,23 +768,23 @@
           </div>
         </div>
 
-        <!-- LINE対応状況 + 温度感 -->
+        <!-- LINE対応 + 温度感 -->
         <div class="section">
-          <div class="section-title big">LINE対応状況 <span class="req">必須</span></div>
+          <div class="section-title big">LINE対応 <span class="req">必須</span></div>
 
-          <!-- 3つを同枠：新規担当数 → 新規流入数 → 現在対応数 -->
+          <!-- 3つを同枠：新規流入数 → 新規担当数 → 現在対応数 -->
           <div class="field">
-            <div class="group-card cols-3" role="group" aria-label="LINE対応状況 KPI">
-              <div class="card-item">
-                <div class="card-label">新規担当数（本日＋）</div>
-                <input id="lineNew" name="lineNew" type="number" inputmode="numeric" min="0" required />
-                <div class="error" data-error-for="lineNew">新規担当数（本日＋）を入力してください。</div>
-              </div>
-
+            <div class="group-card cols-3" role="group" aria-label="LINE対応 KPI">
               <div class="card-item">
                 <div class="card-label">新規流入数（本日＋）</div>
                 <input id="lineInflow" name="lineInflow" type="number" inputmode="numeric" min="0" required />
                 <div class="error" data-error-for="lineInflow">新規流入数（本日＋）を入力してください。</div>
+              </div>
+
+              <div class="card-item">
+                <div class="card-label">新規担当数（本日＋）</div>
+                <input id="lineNew" name="lineNew" type="number" inputmode="numeric" min="0" required />
+                <div class="error" data-error-for="lineNew">新規担当数（本日＋）を入力してください。</div>
               </div>
 
               <div class="card-item">
@@ -804,7 +853,6 @@
                   <div class="val"><span id="dealTotalPreview">—</span></div>
                 </div>
 
-                <!-- 右の「0」が出ないよう、初期値は空のまま -->
                 <input
                   id="dealTotal"
                   name="dealTotal"
@@ -820,26 +868,34 @@
             </div>
           </div>
 
-          <!-- 今月：1枠に「申込数 / 対応顧客数 / 成約率（推定）」 -->
+          <!-- 今月：1つの枠で「今月」ヘッダ + 申込数/対応顧客数/成約率（推定） -->
           <div class="field" style="margin-top: 6px;">
-            <div class="group-card cols-3" role="group" aria-label="今月の数値">
-              <div class="card-item">
-                <div class="card-label">申込数</div>
-                <div class="note">※キャンセルは除く</div>
-                <input id="dealMonth" name="dealMonth" type="number" inputmode="numeric" min="0" required />
-                <div class="error" data-error-for="dealMonth">申込数を入力してください。</div>
+            <div class="group-card month-wrap" role="group" aria-label="今月の数値">
+              <div class="month-head">
+                <div class="month-pill">今月</div>
+                <div class="month-sub">数字だけサクッと</div>
               </div>
 
-              <div class="card-item">
-                <div class="card-label">対応顧客数</div>
-                <input id="custMonth" name="custMonth" type="number" inputmode="numeric" min="0" required />
-                <div class="error" data-error-for="custMonth">対応顧客数を入力してください。</div>
-              </div>
+              <div class="month-grid">
+                <div class="card-item">
+                  <div class="card-label">申込数</div>
+                  <div class="note">※キャンセルは除く</div>
+                  <input id="dealMonth" name="dealMonth" type="number" inputmode="numeric" min="0" required />
+                  <div class="error" data-error-for="dealMonth">申込数を入力してください。</div>
+                </div>
 
-              <div class="card-item" style="align-content:start;">
-                <div class="kpi" aria-live="polite">
-                  <strong>成約率（推定）</strong>
-                  <div class="val" id="conversionRateMonth">— %</div>
+                <div class="card-item">
+                  <div class="card-label">対応顧客数</div>
+                  <div class="note">※1度でも返信があったすべての顧客</div>
+                  <input id="custMonth" name="custMonth" type="number" inputmode="numeric" min="0" required />
+                  <div class="error" data-error-for="custMonth">対応顧客数を入力してください。</div>
+                </div>
+
+                <div class="card-item" style="align-content:start;">
+                  <div class="kpi" aria-live="polite">
+                    <strong>成約率（推定）</strong>
+                    <div class="val" id="conversionRateMonth">— %</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -939,12 +995,12 @@
           return !Number.isNaN(n) && n >= 0;
         },
 
-        lineNew: () => {
-          const n = toNumOrNaN(form.lineNew.value);
-          return !Number.isNaN(n) && n >= 0;
-        },
         lineInflow: () => {
           const n = toNumOrNaN(form.lineInflow.value);
+          return !Number.isNaN(n) && n >= 0;
+        },
+        lineNew: () => {
+          const n = toNumOrNaN(form.lineNew.value);
           return !Number.isNaN(n) && n >= 0;
         },
         lineNow: () => {
@@ -981,7 +1037,7 @@
         "date","name",
         "summary",
         "contractProgress","contractTotal",
-        "lineNew","lineInflow","lineNow",
+        "lineInflow","lineNew","lineNow",
         "lineFollow","lineFollowReact",
         "dealTotal","dealMonth","custMonth",
         "tomorrowPlan"
@@ -1053,8 +1109,8 @@
           contractProgress: form.contractProgress.value,
           contractTotal: form.contractTotal.value,
 
-          lineNew: form.lineNew.value,
           lineInflow: form.lineInflow.value,
+          lineNew: form.lineNew.value,
           lineNow: form.lineNow.value,
 
           lineFollow: form.lineFollow.value,
@@ -1066,7 +1122,6 @@
 
           dealTotal: form.dealTotal.value,
 
-          // 互換のためキー名は維持（ラベルはUI側で変えている）
           dealMonth: form.dealMonth.value,
           custMonth: form.custMonth.value,
           conversionRateMonth: document.getElementById("conversionRateMonth")?.textContent ?? "",
