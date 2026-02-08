@@ -340,6 +340,7 @@
     .kpi strong{
       font-size: 15px;
       letter-spacing: 0.01em;
+      font-weight: 700;
     }
     .kpi .val{
       font-weight: 800;
@@ -354,11 +355,12 @@
       border: 1px solid rgba(31,157,99,0.22);
       box-shadow: 0 10px 18px rgba(2,24,12,0.06);
     }
+    /* ←太すぎ修正（他と同等） */
     .kpi-major strong{
       font-size: 15px;
       letter-spacing: 0.06em;
       color: #0f172a;
-      font-weight: 900;
+      font-weight: 700;
     }
     .kpi-major .val{
       font-size: 20px;
@@ -367,7 +369,7 @@
       color: var(--accent-2);
     }
 
-    /* 共通：仲間で括るカード（LINE状況のデザインを踏襲） */
+    /* 共通：仲間で括るカード */
     .group-card{
       border-radius: 14px;
       border: 1px solid rgba(31,157,99,0.18);
@@ -421,14 +423,14 @@
       }
     }
 
-    /* 日付の枠：横長な丸枠（四角枠じゃなく） */
+    /* 日付の枠：横長な丸枠 */
     .date-input{
       padding: 10px 14px;
       font-size: 14.5px;
       border-radius: 999px;
     }
 
-    /* ===== 基本情報：縦画面でも崩れないように固定レイアウト ===== */
+    /* ===== 基本情報：固定レイアウト ===== */
     .basic-card{
       grid-template-columns: 1fr;
       grid-template-areas:
@@ -440,10 +442,7 @@
     .basic-name{ grid-area: name; }
     .basic-summary{ grid-area: summary; }
 
-    /* スマホで見た目を整える（詰まり/段差の防止） */
-    .basic-card .card-item{
-      padding: 0;
-    }
+    .basic-card .card-item{ padding: 0; }
     .basic-card .basic-date input[type="date"]{
       padding: 9px 12px;
       font-size: 13.5px;
@@ -463,22 +462,18 @@
         gap: 14px;
         align-items: start;
       }
-      /* PC時のみ、name側に仕切り */
       .basic-card .basic-name{
         border-left: 1px solid rgba(0,0,0,0.06);
         padding-left: 14px;
       }
-      /* summaryは横断なので仕切りなし */
       .basic-card .basic-summary{
         border-left: none;
         padding-left: 0;
       }
     }
 
-    /* 契約：進捗（textarea）＋進行中合計（number）を同じ仲間 */
-    .contract-card{
-      gap: 12px;
-    }
+    /* 契約：進捗＋進行中合計 */
+    .contract-card{ gap: 12px; }
     @media (min-width: 720px){
       .contract-card{
         grid-template-columns: 1fr 230px;
@@ -492,7 +487,7 @@
     }
     .contract-card textarea{ min-height: 150px; }
 
-    /* 温度感：3つ同サイズ */
+    /* 温度感 */
     .temp-card textarea{ min-height: 150px; }
     .temp-chip{
       display: inline-flex;
@@ -511,27 +506,6 @@
     }
     .temp-chip[data-level="mid"]{ color: #0f7a4a; }
     .temp-chip[data-level="low"]{ color: #0f7a4a; opacity: 0.9; }
-
-    /* 成約状況：今月は「2つで一括り」 */
-    .conv-card{
-      gap: 12px;
-    }
-    @media (min-width: 720px){
-      .conv-card{
-        grid-template-columns: 1fr 1fr;
-        gap: 14px;
-      }
-      .conv-card .card-item:not(:first-child){
-        border-left: 1px solid rgba(0,0,0,0.06);
-        padding-left: 14px;
-      }
-    }
-    .conv-card .kpi{
-      height: 100%;
-      min-height: 52px;
-    }
-
-    .spacer-xl{ height: 18px; }
 
     footer{
       padding: 10px 18px 26px;
@@ -686,7 +660,7 @@
       </div>
 
       <form id="dailyReportForm" novalidate>
-        <!-- 基本情報（3項目をひとまとめ / 大項目に必須） -->
+        <!-- 基本情報 -->
         <div class="section">
           <div class="section-title big">基本情報 <span class="req">必須</span></div>
 
@@ -718,7 +692,7 @@
           </div>
         </div>
 
-        <!-- 契約（2項目を同じ仲間としてレイアウト / 大項目に必須） -->
+        <!-- 契約関係 -->
         <div class="section">
           <div class="section-title big">契約関係 <span class="req">必須</span></div>
           <div class="section-sub">（顧客名＋フェーズ）</div>
@@ -749,20 +723,26 @@
         <div class="section">
           <div class="section-title big">LINE対応状況 <span class="req">必須</span></div>
 
-          <!-- 同じ枠内：現在対応数 / 新規担当数（本日＋） -->
+          <!-- 3つを同枠：新規担当数 → 新規流入数 → 現在対応数 -->
           <div class="field">
-            <div class="group-card cols-2" role="group" aria-label="LINE対応状況 KPI">
+            <div class="group-card cols-3" role="group" aria-label="LINE対応状況 KPI">
+              <div class="card-item">
+                <div class="card-label">新規担当数（本日＋）</div>
+                <input id="lineNew" name="lineNew" type="number" inputmode="numeric" min="0" required />
+                <div class="error" data-error-for="lineNew">新規担当数（本日＋）を入力してください。</div>
+              </div>
+
+              <div class="card-item">
+                <div class="card-label">新規流入数（本日＋）</div>
+                <input id="lineInflow" name="lineInflow" type="number" inputmode="numeric" min="0" required />
+                <div class="error" data-error-for="lineInflow">新規流入数（本日＋）を入力してください。</div>
+              </div>
+
               <div class="card-item">
                 <div class="card-label">現在対応数</div>
                 <div class="note">※既読無視から48時間経過した顧客を除く</div>
                 <input id="lineNow" name="lineNow" type="number" inputmode="numeric" min="0" required />
                 <div class="error" data-error-for="lineNow">現在対応数を入力してください。</div>
-              </div>
-
-              <div class="card-item">
-                <div class="card-label">新規担当数（本日＋）</div>
-                <input id="lineNew" name="lineNew" type="number" inputmode="numeric" min="0" required />
-                <div class="error" data-error-for="lineNew">新規担当数（本日＋）を入力してください。</div>
               </div>
             </div>
           </div>
@@ -787,7 +767,7 @@
 
           <div class="divider"></div>
 
-          <!-- 温度感：大項目は任意（黒字） -->
+          <!-- 温度感：任意 -->
           <div class="section-title big" style="margin-top:10px;">温度感 <span class="opt-black">任意</span></div>
           <div class="section-sub">（顧客名＋状況）</div>
 
@@ -811,10 +791,9 @@
           </div>
         </div>
 
-        <!-- 成約状況（大項目に必須） -->
+        <!-- 成約状況 -->
         <div class="section">
           <div class="section-title big">成約状況 <span class="req">必須</span></div>
-          <div class="section-sub">※身内の紹介を除く</div>
 
           <!-- 累計：重要指標として1項目だけ -->
           <div class="field">
@@ -824,31 +803,42 @@
                   <strong>成約数（累計）</strong>
                   <div class="val"><span id="dealTotalPreview">—</span></div>
                 </div>
-                <input id="dealTotal" name="dealTotal" type="number" inputmode="numeric" min="0" required style="margin-top:8px;" />
+
+                <!-- 右の「0」が出ないよう、初期値は空のまま -->
+                <input
+                  id="dealTotal"
+                  name="dealTotal"
+                  type="number"
+                  inputmode="numeric"
+                  min="0"
+                  required
+                  style="margin-top:8px;"
+                  placeholder=""
+                />
                 <div class="error" data-error-for="dealTotal">成約数（累計）を入力してください。</div>
               </div>
             </div>
           </div>
 
-          <!-- 今月：申込数＋対応顧客数＋推定成約率 -->
+          <!-- 今月：1枠に「申込数 / 対応顧客数 / 成約率（推定）」 -->
           <div class="field" style="margin-top: 6px;">
-            <div class="group-card conv-card" role="group" aria-label="成約状況（今月）">
+            <div class="group-card cols-3" role="group" aria-label="今月の数値">
               <div class="card-item">
-                <div class="card-label">申込数（今月）</div>
+                <div class="card-label">申込数</div>
                 <div class="note">※キャンセルは除く</div>
                 <input id="dealMonth" name="dealMonth" type="number" inputmode="numeric" min="0" required />
-                <div class="error" data-error-for="dealMonth">申込数（今月）を入力してください。</div>
+                <div class="error" data-error-for="dealMonth">申込数を入力してください。</div>
               </div>
 
               <div class="card-item">
-                <div class="card-label">対応顧客数（今月）</div>
+                <div class="card-label">対応顧客数</div>
                 <input id="custMonth" name="custMonth" type="number" inputmode="numeric" min="0" required />
-                <div class="error" data-error-for="custMonth">対応顧客数（今月）を入力してください。</div>
+                <div class="error" data-error-for="custMonth">対応顧客数を入力してください。</div>
               </div>
 
               <div class="card-item" style="align-content:start;">
                 <div class="kpi" aria-live="polite">
-                  <strong>推定成約率（今月）</strong>
+                  <strong>成約率（推定）</strong>
                   <div class="val" id="conversionRateMonth">— %</div>
                 </div>
               </div>
@@ -860,11 +850,7 @@
         <div class="section">
           <div class="section-title">現状の課題 <span class="opt">任意</span></div>
           <div class="field">
-            <textarea
-              id="issues"
-              name="issues"
-              placeholder="具体的に記述してください。"
-            ></textarea>
+            <textarea id="issues" name="issues" placeholder="具体的に記述してください。"></textarea>
           </div>
         </div>
 
@@ -872,11 +858,7 @@
         <div class="section">
           <div class="section-title">改善案 <span class="opt">任意</span></div>
           <div class="field">
-            <textarea
-              id="improvements"
-              name="improvements"
-              placeholder="具体的に記述してください。"
-            ></textarea>
+            <textarea id="improvements" name="improvements" placeholder="具体的に記述してください。"></textarea>
           </div>
         </div>
 
@@ -957,14 +939,19 @@
           return !Number.isNaN(n) && n >= 0;
         },
 
-        lineNow: () => {
-          const n = toNumOrNaN(form.lineNow.value);
-          return !Number.isNaN(n) && n >= 0;
-        },
         lineNew: () => {
           const n = toNumOrNaN(form.lineNew.value);
           return !Number.isNaN(n) && n >= 0;
         },
+        lineInflow: () => {
+          const n = toNumOrNaN(form.lineInflow.value);
+          return !Number.isNaN(n) && n >= 0;
+        },
+        lineNow: () => {
+          const n = toNumOrNaN(form.lineNow.value);
+          return !Number.isNaN(n) && n >= 0;
+        },
+
         lineFollow: () => {
           const n = toNumOrNaN(form.lineFollow.value);
           return !Number.isNaN(n) && n >= 0;
@@ -987,7 +974,6 @@
           return !Number.isNaN(n) && n >= 0;
         },
 
-        // issues / improvements は任意化したのでバリデーション対象外
         tomorrowPlan: () => nonEmpty(form.tomorrowPlan.value)
       };
 
@@ -995,7 +981,8 @@
         "date","name",
         "summary",
         "contractProgress","contractTotal",
-        "lineNow","lineNew","lineFollow","lineFollowReact",
+        "lineNew","lineInflow","lineNow",
+        "lineFollow","lineFollowReact",
         "dealTotal","dealMonth","custMonth",
         "tomorrowPlan"
       ];
@@ -1031,17 +1018,23 @@
       };
 
       const updateRates = () => {
-        // 今月（推定成約率）
+        // 今月：成約率（推定）= 申込数 / 対応顧客数
         const applyMonth = Number.isFinite(Number(form.dealMonth.value)) ? Number(form.dealMonth.value) : 0;
         const custMonth = Number.isFinite(Number(form.custMonth.value)) ? Number(form.custMonth.value) : 0;
 
         const elMonth = document.getElementById("conversionRateMonth");
         if (elMonth) elMonth.textContent = rateText(applyMonth, custMonth);
 
-        // 累計（表示だけ強調）
-        const dealTotal = Number.isFinite(Number(form.dealTotal.value)) ? Number(form.dealTotal.value) : NaN;
+        // 累計：入力が空なら「—」のまま（0を出さない）
+        const raw = String(form.dealTotal.value ?? "").trim();
         const preview = document.getElementById("dealTotalPreview");
-        if (preview) preview.textContent = Number.isFinite(dealTotal) ? String(dealTotal) : "—";
+        if (preview) {
+          if (raw === "") preview.textContent = "—";
+          else {
+            const n = Number(raw);
+            preview.textContent = Number.isFinite(n) ? String(n) : "—";
+          }
+        }
       };
 
       ["dealTotal","dealMonth","custMonth"].forEach(id => {
@@ -1060,8 +1053,10 @@
           contractProgress: form.contractProgress.value,
           contractTotal: form.contractTotal.value,
 
-          lineNow: form.lineNow.value,
           lineNew: form.lineNew.value,
+          lineInflow: form.lineInflow.value,
+          lineNow: form.lineNow.value,
+
           lineFollow: form.lineFollow.value,
           lineFollowReact: form.lineFollowReact.value,
 
@@ -1071,12 +1066,11 @@
 
           dealTotal: form.dealTotal.value,
 
-          // 「申込数（今月）」だが、テンプレ互換のためキー名は維持
+          // 互換のためキー名は維持（ラベルはUI側で変えている）
           dealMonth: form.dealMonth.value,
           custMonth: form.custMonth.value,
           conversionRateMonth: document.getElementById("conversionRateMonth")?.textContent ?? "",
 
-          // 任意だけど送る（空なら空のまま）
           issues: form.issues.value,
           improvements: form.improvements.value,
 
