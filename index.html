@@ -253,6 +253,7 @@
       min-width: 0;
     }
 
+    /* ===== 入力文字の太さを統一（「具体的に記述してください。」と同じ細さ） ===== */
     input[type="text"],
     input[type="date"],
     input[type="number"],
@@ -262,21 +263,30 @@
       border-radius: var(--radius-md);
       padding: 12px 12px;
       font-size: 16px;
+      font-weight: 400; /* ★ここがポイント：入力文字を細めに統一 */
       outline: none;
       background: #fff;
       transition: border .15s ease, box-shadow .15s ease, background .15s ease;
       max-width: 100%;
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
     textarea{
       min-height: 110px;
       resize: vertical;
     }
 
-    input::placeholder, textarea::placeholder{ color: #9aa3af; }
-
-    /* ★追加：本日の業務内容のプレースホルダーを「具体的に記述してください。」と同じ細さに */
-    #summary::placeholder{
+    /* プレースホルダーも同じ細さで揃える */
+    input::placeholder,
+    textarea::placeholder{
+      color: #9aa3af;
       font-weight: 400;
+    }
+
+    /* iOSの自動太字っぽさ/見え方の差を抑える（数値入力など） */
+    input, textarea{
+      font-variant-numeric: tabular-nums;
     }
 
     input:focus, textarea:focus{
@@ -400,15 +410,16 @@
       font-size: 15px;
       flex-wrap: wrap;
     }
+
+    /* ★以前の「入力太字」を撤去して、全項目で細さを統一 */
     .group-card input[type="number"],
     .group-card input[type="text"],
     .group-card input[type="date"],
     .group-card textarea{
       border-radius: 12px;
-      font-weight: 700;
+      font-weight: 400; /* ★統一 */
       min-width: 0;
     }
-    .group-card textarea{ font-weight: 600; }
 
     /* ===== ここから：フォント統一（ラベル＆例） ===== */
     .label-soft{
@@ -472,6 +483,7 @@
     .date-input{
       padding: 10px 14px;
       font-size: 14.5px;
+      font-weight: 400; /* ★統一 */
       border-radius: 999px;
     }
 
@@ -491,11 +503,12 @@
     .basic-card .basic-date input[type="date"]{
       padding: 9px 12px;
       font-size: 13.5px;
+      font-weight: 400; /* ★統一 */
       border-radius: 999px;
     }
     .basic-card .basic-summary textarea{
       min-height: 130px;
-      font-weight: 600;
+      font-weight: 400; /* ★統一 */
     }
 
     @media (min-width: 720px){
@@ -965,7 +978,7 @@
         <div class="section">
           <div class="section-title">明日の予定 <span class="req">必須</span></div>
           <div class="field">
-            <textarea id="tomorrowPlan" name="tomorrowPlan" required></textarea>
+            <textarea id="tomorrowPlan" name="tomorrowPlan" required placeholder="具体的に記述してください。"></textarea>
             <div class="error" data-error-for="tomorrowPlan">明日の予定を入力してください。</div>
           </div>
 
@@ -1117,14 +1130,12 @@
       };
 
       const updateRates = () => {
-        // 今月：成約率（推定）= 申込数 / 対応顧客数
         const applyMonth = Number.isFinite(Number(form.dealMonth.value)) ? Number(form.dealMonth.value) : 0;
         const custMonth = Number.isFinite(Number(form.custMonth.value)) ? Number(form.custMonth.value) : 0;
 
         const elMonth = document.getElementById("conversionRateMonth");
         if (elMonth) elMonth.textContent = rateText(applyMonth, custMonth);
 
-        // 累計：入力が空なら「—」のまま（0を出さない）
         const raw = String(form.dealTotal.value ?? "").trim();
         const preview = document.getElementById("dealTotalPreview");
         if (preview) {
